@@ -43,7 +43,7 @@ int main(void){
 
         }else{
 
-            //printf("solucao eh: %lf", pontoMedio);
+            printf("solucao eh: %lf", pontoMedio);
 
         }
 
