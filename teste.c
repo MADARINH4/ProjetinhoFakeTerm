@@ -4,52 +4,73 @@
 #include <stdbool.h>
 #include <math.h>
 
+//void metodoBissecao(double parametroA, double parametroB, double medio, double epsilon);
 int verificaPontoMedioEDelta(double parametroA, double parametroB, double medio, double epsilon);
 
 int main(void){
 
-    int resultado = 0;
+    double verifica = 1;
+    int resultado = 1;
     double pontoA = 0;
     double pontoB = 1;
     double pontoMedio;
     double erro = 0.0001;
+    double funcaoDeA;
+    double funcaoDeB;
+    
 
-    while(resultado != 1){
+    while(verifica > 0){
 
-        pontoMedio = (pontoA + pontoB)/2;
+        printf("\nDigite o intervalo: ");
+        scanf("%lf%lf", &pontoA, &pontoB);
 
-        resultado = verificaPontoMedioEDelta(pontoA, pontoB, pontoMedio, erro);
+        funcaoDeA = ((atan(pontoA)) - (1/exp(pontoA)));
+        funcaoDeB = ((atan(pontoB)) - (1/exp(pontoB)));
 
-        if(resultado == 0){
+        printf("\n\nverifica eh: %.9lf.......%.9lf", funcaoDeA, funcaoDeB);
 
-            double funcaoDeA;
-            double funcaoDeB;
-            double funcaoDeM;
+        verifica = (funcaoDeA * funcaoDeB);
 
-            funcaoDeA = ((atan(pontoA)) - (1/exp(pontoA)));
-            funcaoDeB = ((atan(pontoB)) - (1/exp(pontoB)));
-            funcaoDeM = ((atan(pontoMedio)) - (1/exp(pontoMedio)));
+        //printf("\n\nverifica eh: %.9lf", verifica);
 
-            if((funcaoDeA * funcaoDeM) > 0){
+        if(verifica < 0){
 
-                pontoA = pontoMedio;
+            while(resultado != 1){
 
-            }else if((funcaoDeB * funcaoDeM) > 0){
+                pontoMedio = (pontoA + pontoB)/2;
 
-                pontoB = pontoMedio;
+                resultado = verificaPontoMedioEDelta(pontoA, pontoB, pontoMedio, erro);
+
+                if(resultado == 0){
+
+                    double funcaoDeM;
+
+                    funcaoDeA = ((atan(pontoA)) - (1/exp(pontoA)));
+                    funcaoDeB = ((atan(pontoB)) - (1/exp(pontoB)));
+                    funcaoDeM = ((atan(pontoMedio)) - (1/exp(pontoMedio)));
+
+                    if((funcaoDeA * funcaoDeM) > 0){
+
+                        pontoA = pontoMedio;
+
+                    }else if((funcaoDeB * funcaoDeM) > 0){
+
+                        pontoB = pontoMedio;
+
+                    }
+
+
+                }else{
+
+                    printf("\n\nsolucao eh: %.9lf", pontoMedio);
+
+                }
 
             }
-
-
-        }else{
-
-            printf("solucao eh: %lf", pontoMedio);
 
         }
 
     }
-
-    printf("solucao eh: %lf", pontoMedio);
 
     return 0;
 
