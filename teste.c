@@ -4,6 +4,8 @@
 #include <stdbool.h>
 #include <math.h>
 
+verificaPontoMedioEDelta(double parametroA, double parametroB, double medio, double epsilon);
+
 int main(void){
 
     int resultado = 1;
@@ -53,7 +55,7 @@ int main(void){
 
 }
 
-int calculaDelta(double parametroA, double parametroB, double medio, double epsilon){
+int verificaPontoMedioEDelta(double parametroA, double parametroB, double medio, double epsilon){
 
     double funcaoDeM;
     double delta;
