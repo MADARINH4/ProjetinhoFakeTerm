@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <math.h>
 
-verificaPontoMedioEDelta(double parametroA, double parametroB, double medio, double epsilon);
+int verificaPontoMedioEDelta(double parametroA, double parametroB, double medio, double epsilon);
 
 int main(void){
 
