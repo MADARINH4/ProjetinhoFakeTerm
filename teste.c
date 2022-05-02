@@ -8,13 +8,11 @@ int verificaPontoMedioEDelta(double parametroA, double parametroB, double medio,
 
 int main(void){
 
-    int resultado = 1;
-    double pontoA;
-    double pontoB;
+    int resultado = 0;
+    double pontoA = 0;
+    double pontoB = 1;
     double pontoMedio;
     double erro = 0.0001;
-
-    resultado = resultado + 1;
 
     while(resultado != 1){
 
@@ -28,9 +26,9 @@ int main(void){
             double funcaoDeB;
             double funcaoDeM;
 
-            funcaoDeA = (atan(pontoA)) - (1/exp(pontoA));
-            funcaoDeB = (atan(pontoB)) - (1/exp(pontoB));
-            funcaoDeM = (atan(pontoMedio)) - (1/exp(pontoMedio));
+            funcaoDeA = ((atan(pontoA)) - (1/exp(pontoA)));
+            funcaoDeB = ((atan(pontoB)) - (1/exp(pontoB)));
+            funcaoDeM = ((atan(pontoMedio)) - (1/exp(pontoMedio)));
 
             if((funcaoDeA * funcaoDeM) > 0){
 
@@ -45,11 +43,13 @@ int main(void){
 
         }else{
 
-            printf("solucao eh: %lf", pontoMedio);
+            //printf("solucao eh: %lf", pontoMedio);
 
         }
 
     }
+
+    printf("solucao eh: %lf", pontoMedio);
 
     return 0;
 
@@ -60,9 +60,9 @@ int verificaPontoMedioEDelta(double parametroA, double parametroB, double medio,
     double funcaoDeM;
     double delta;
 
-    funcaoDeM = (atan(medio)) - (1/exp(medio));
+    funcaoDeM = ((atan(medio)) - (1/exp(medio)));
 
-    delta = abs(parametroB - parametroA);
+    delta = fabs(parametroB - parametroA);
 
     if(funcaoDeM == 0)return 1;
     if(delta < epsilon)return 1;
