@@ -26,6 +26,10 @@ int main(void){
             double funcaoDeB;
             double funcaoDeM;
 
+            funcaoDeA = (atan(pontoA)) - (1/exp(pontoA));
+            funcaoDeB = (atan(pontoB)) - (1/exp(pontoB));
+            funcaoDeM = (atan(pontoMedio)) - (1/exp(pontoMedio));
+
             if((funcaoDeA * funcaoDeM) > 0){
 
                 pontoA = pontoMedio;
