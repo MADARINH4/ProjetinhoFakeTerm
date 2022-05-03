@@ -21,7 +21,7 @@ int main(void){
 
         system("cls");
 
-        printf("\nDigite o intervalo: ");
+        printf("\n\nDigite o intervalo: ");
         scanf("%lf%lf", &pontoA, &pontoB);
 
         funcaoDeA = ((atan(pontoA)) - (1/exp(pontoA)));
@@ -32,6 +32,13 @@ int main(void){
         if(verifica < 0){
             
             metodoBissecao(pontoA, pontoB, erro);
+
+        }else{
+
+            system("cls");
+            printf("\n\nIntervalo invalido digitado\n");
+            system("pause");
+
 
         }
 
@@ -91,7 +98,9 @@ void metodoBissecao(double parametroA, double parametroB, double epsilon){
 
         }else{
 
-            printf("\n\nsolucao eh: %.9lf", pontoMedio);
+            printf("\n\nsolucao eh: %.9lf\n", pontoMedio);
+            system("pause");
+            system("cls");
 
         }
 
