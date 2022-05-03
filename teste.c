@@ -5,7 +5,10 @@
 #include <math.h>
 
 void metodoBissecao(double parametroA, double parametroB, double epsilon);
+void metodoDasCordas(double parametroA, double parametroB, double epsilon);
 int verificaPontoMedioEDelta(double parametroA, double parametroB, double medio, double epsilon);
+void fixaBVariaA(double posicaoA, double posicaoB, double desvio);
+void fixaAVariaB(double posicaoA, double posicaoB, double desvio);
 
 int main(void){
 
@@ -32,6 +35,7 @@ int main(void){
         if(verifica < 0){
             
             metodoBissecao(pontoA, pontoB, erro);
+            metodoDasCordas(pontoA, pontoB, erro);
 
         }else{
 
@@ -61,6 +65,60 @@ int verificaPontoMedioEDelta(double parametroA, double parametroB, double medio,
     if(delta < epsilon)return 1;
 
     return 0;
+
+}
+
+void fixaBVariaA(double posicaoA, double posicaoB, double desvio){
+
+    double solucao;
+    double delta = 1;
+    double funcaoDeA;
+    double funcaoDeB;
+
+    funcaoDeB = ((atan(posicaoB)) - (1/exp(posicaoB)));
+
+    while(delta > desvio){
+
+        funcaoDeA = ((atan(posicaoA)) - (1/exp(posicaoA)));
+
+        solucao = posicaoA + ((funcaoDeA/(funcaoDeB - funcaoDeA)) * (posicaoA - posicaoB));
+
+        delta = fabs(posicaoA - solucao);
+
+        posicaoA = solucao;
+
+    }
+
+    printf("\n\nsolucao eh: %.9lf\n", solucao);
+    system("pause");
+    system("cls");
+
+}
+
+void fixaAVariaB(double posicaoA, double posicaoB, double desvio){
+
+    double solucao;
+    double delta = 1;
+    double funcaoDeA;
+    double funcaoDeB;
+
+    funcaoDeA = ((atan(posicaoA)) - (1/exp(posicaoA)));
+
+    while(delta > desvio){
+
+        funcaoDeB = ((atan(posicaoB)) - (1/exp(posicaoB)));
+
+        solucao = posicaoB + ((funcaoDeB/(funcaoDeA - funcaoDeB)) * (posicaoB - posicaoA));
+
+        delta = fabs(posicaoB - solucao);
+
+        posicaoB = solucao;
+
+    }
+
+    printf("\n\nsolucao eh: %.9lf\n", solucao);
+    system("pause");
+    system("cls");
 
 }
 
@@ -105,5 +163,25 @@ void metodoBissecao(double parametroA, double parametroB, double epsilon){
         }
 
     }
+
+}
+
+void metodoDasCordas(double parametroA, double parametroB, double epsilon){
+
+    double funcaoDeA;
+    double derivada2DeA;
+
+    funcaoDeA = ((atan(parametroA)) - (1/exp(parametroA)));
+    derivada2DeA = ((-2 * parametroA)/((1+parametroA*parametroA)*(1+parametroA*parametroA))) - (1/exp(parametroA));
+    
+    if((funcaoDeA * derivada2DeA) < 0){
+
+        fixaBVariaA(parametroA, parametroB, epsilon);
+
+    }else if((funcaoDeA * derivada2DeA) > 0){
+
+        fixaAVariaB(parametroA, parametroB, epsilon);
+
+    }   
 
 }
