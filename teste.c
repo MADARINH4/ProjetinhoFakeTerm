@@ -4,36 +4,55 @@
 #include <stdbool.h>
 #include <math.h>
 
+//Funcao para o calculo atravez do metodo da bissacao
 void metodoBissecao(double parametroA, double parametroB, double epsilon);
+
+//Funcao para o calculo atravez do metodo das cordas
 void metodoDasCordas(double parametroA, double parametroB, double epsilon);
+
+//Funcao para verificar se f(pontoMedio) = 0 ou se delta eh menoor que o erro
 int verificaPontoMedioEDelta(double parametroA, double parametroB, double medio, double epsilon);
+
+//Funcao onde se aproxima da solucao pela esquerda, variando o ponto A
 void fixaBVariaA(double posicaoA, double posicaoB, double desvio);
+
+//Funcao onde se aproxima da solucao pela direita, variando o ponto B
 void fixaAVariaB(double posicaoA, double posicaoB, double desvio);
 
 int main(void){
 
-    double verifica = 1;
-    double pontoA = 0;
-    double pontoB = 1;
-    double erro = 0.0001;
-    double funcaoDeA;
-    double funcaoDeB;
+    double verifica = 1;            //Controla o loop principal
+    double pontoA = 0;              //Primeiro ponto do iintervalo
+    double pontoB = 1;              //Segundo ponto do iintervalo
+    double erro = 0.0001;           //Erro maximo
+    double funcaoDeA;               //f(a)
+    double funcaoDeB;               //f(b)
     
 
+    /*Equanto o produto entre f(a) e f(b) for maior que 0
+    , repete o loop ate se digitar um intervalo valido*/
     while(verifica > 0){
 
         system("cls");
 
         printf("\n\nDigite o intervalo: ");
+
+        //Scanei os pontos do usuario
         scanf("%lf%lf", &pontoA, &pontoB);
 
+        //Define funcao no ponto "a" e no ponto "b"
         funcaoDeA = ((atan(pontoA)) - (1/exp(pontoA)));
         funcaoDeB = ((atan(pontoB)) - (1/exp(pontoB)));
 
+        //Calcula valor do produto entre as funcaoes
         verifica = (funcaoDeA * funcaoDeB);
 
+        /*Se "verifica" menor que 0, entao o produto entre
+        f(a) e f(b) eh menor que 0, logo o intervalo eh
+        valido*/
         if(verifica < 0){
             
+            //Chamada de funcao dos metodos
             metodoBissecao(pontoA, pontoB, erro);
             metodoDasCordas(pontoA, pontoB, erro);
 
@@ -42,7 +61,6 @@ int main(void){
             system("cls");
             printf("\n\nIntervalo invalido digitado\n");
             system("pause");
-
 
         }
 
