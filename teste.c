@@ -111,7 +111,7 @@ void fixaBVariaA(double posicaoA, double posicaoB, double desvio){
     }
 
     system("cls");
-    printf("\n\nsolucao eh: %.9lf\n", solucao);
+    printf("\n\nSolucao: s = %.9lf +/- %.9lf\n", solucao, desvio);
     system("pause");
 
 }
@@ -147,20 +147,19 @@ int messagens(int resposta){
 
     switch (resposta){
 
-        case 1:
-
-            printf("\n\nDigite o intervalo: ");
+        case 1: printf("\n\nDigite o intervalo: ");
             break;
 
-        case 2:
-
-            printf("\n\nIntervalo invalido digitado\n");
+        case 2: printf("\n\nIntervalo invalido digitado\n");
             break;
         
-        case 3:
+        case 3: printf("\n\n\t\t\t\t\tMETODO BISSECAO\n");
+            break;
 
-            printf("\n\nIntervalo invalido digitado\n");
-            break;        
+        case 4: printf("\n  %2s   %13s   %13s   %13s   %13s   %13s   %13s  ", "n", 
+                "a", "b", "m", "f(a)", "f(b)", "f(m)");
+            printf("\n------------------------------------------------------------------------------------------------------");
+            break;         
     
         default:
             break;
@@ -177,17 +176,25 @@ void metodoBissecao(double parametroA, double parametroB, double epsilon){
     double funcaoDeM;
     int contador = 0;
 
+    system("cls");
+    messagens(3);
+    messagens(4);
+
     while(resultado != 1){
 
         pontoMedio = (parametroA + parametroB)/2;
 
         resultado = verificaPontoMedioEDelta(parametroA, parametroB, pontoMedio, epsilon);
 
-        if(resultado == 0){
+        funcaoDeA = ((atan(parametroA)) - (1/exp(parametroA)));
+        funcaoDeB = ((atan(parametroB)) - (1/exp(parametroB)));
+        funcaoDeM = ((atan(pontoMedio)) - (1/exp(pontoMedio)));
 
-            funcaoDeA = ((atan(parametroA)) - (1/exp(parametroA)));
-            funcaoDeB = ((atan(parametroB)) - (1/exp(parametroB)));
-            funcaoDeM = ((atan(pontoMedio)) - (1/exp(pontoMedio)));
+        printf("\n| %2d | %13.9lf | %13.9lf | %13.9lf | %13.9lf | %13.9lf | %13.9lf |", 
+        contador, parametroA, parametroB, pontoMedio, funcaoDeA, funcaoDeB, funcaoDeM);
+        printf("\n------------------------------------------------------------------------------------------------------");
+
+        if(resultado == 0){
 
             if((funcaoDeA * funcaoDeM) > 0){
 
@@ -202,14 +209,11 @@ void metodoBissecao(double parametroA, double parametroB, double epsilon){
 
         }else{
 
-            //system("cls");
-            printf("\n\nsolucao eh: %.9lf\n", pontoMedio);
+            printf("\n\nSolucao: s = %.9lf +/- %.9lf\n", pontoMedio, epsilon);
             system("pause");
 
         }
 
-        printf("\n\n%13d%13.9lf%13.9lf%13.9lf%13.9lf%13.9lf%13.9lf", 
-        contador, parametroA, parametroB, pontoMedio, funcaoDeA, funcaoDeB, funcaoDeM);
         contador++;
 
     }
