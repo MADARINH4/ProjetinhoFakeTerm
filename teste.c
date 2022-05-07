@@ -95,22 +95,30 @@ void fixaBVariaA(double posicaoA, double posicaoB, double desvio){
     double delta = 1;
     double funcaoDeA;
     double funcaoDeB;
+    double funcaoDaSolucao;
+    int contador = 0;
 
+    system("cls");
+    messagens(5);
+    messagens(6);
     funcaoDeB = ((atan(posicaoB)) - (1/exp(posicaoB)));
 
     while(delta > desvio){
 
         funcaoDeA = ((atan(posicaoA)) - (1/exp(posicaoA)));
-
         solucao = posicaoA + ((funcaoDeA/(funcaoDeB - funcaoDeA)) * (posicaoA - posicaoB));
-
+        funcaoDaSolucao = ((atan(solucao)) - (1/exp(solucao)));
         delta = fabs(posicaoA - solucao);
 
+        printf("\n| %2d | %13.9lf | %13.9lf | %13.9lf | %13.9lf |", 
+        contador, posicaoA, solucao, funcaoDaSolucao, delta);
+        printf("\n----------------------------------------------------------------------");
+
         posicaoA = solucao;
+        contador++;
 
     }
 
-    system("cls");
     printf("\n\nSolucao: s = %.9lf +/- %.9lf\n", solucao, desvio);
     system("pause");
 
@@ -122,23 +130,31 @@ void fixaAVariaB(double posicaoA, double posicaoB, double desvio){
     double delta = 1;
     double funcaoDeA;
     double funcaoDeB;
+    double funcaoDaSolucao;
+    int contador = 0;
 
+    system("cls");
+    messagens(5);
+    messagens(6);
     funcaoDeA = ((atan(posicaoA)) - (1/exp(posicaoA)));
 
     while(delta > desvio){
 
         funcaoDeB = ((atan(posicaoB)) - (1/exp(posicaoB)));
-
         solucao = posicaoB + ((funcaoDeB/(funcaoDeA - funcaoDeB)) * (posicaoB - posicaoA));
-
+        funcaoDaSolucao = ((atan(solucao)) - (1/exp(solucao)));
         delta = fabs(posicaoB - solucao);
 
+        printf("\n| %2d | %13.9lf | %13.9lf | %13.9lf | %13.9lf |", 
+        contador, posicaoB, solucao, funcaoDaSolucao, delta);
+        printf("\n----------------------------------------------------------------------");
+
         posicaoB = solucao;
+        contador++;
 
     }
 
-    system("cls");
-    printf("\n\nsolucao eh: %.9lf\n", solucao);
+    printf("\n\nSolucao: s = %.9lf +/- %.9lf\n", solucao, delta);
     system("pause");
 
 }
@@ -159,7 +175,15 @@ int messagens(int resposta){
         case 4: printf("\n  %2s   %13s   %13s   %13s   %13s   %13s   %13s  ", "n", 
                 "a", "b", "m", "f(a)", "f(b)", "f(m)");
             printf("\n------------------------------------------------------------------------------------------------------");
-            break;         
+            break;
+
+        case 5: printf("\n\n\t\t\tMETODO DAS CORDAS\n");
+            break;
+
+        case 6: printf("\n  %2s   %13s   %13s   %13s   %13s  ", "n", 
+                "Xn", "Xn+1", "f(Xn+1)", "delta");
+            printf("\n----------------------------------------------------------------------");
+            break;                 
     
         default:
             break;
