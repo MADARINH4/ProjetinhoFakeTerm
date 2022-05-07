@@ -154,6 +154,7 @@ void fixaAVariaB(double posicaoA, double posicaoB, double desvio){
 
     }
 
+
     printf("\n\nSolucao: s = %.9lf +/- %.9lf\n", solucao, delta);
     system("pause");
 
