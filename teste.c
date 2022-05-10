@@ -10,7 +10,7 @@ void metodoBissecao(double parametroA, double parametroB, double epsilon);
 //Funcao para o calculo atravez do metodo das cordas
 void metodoDasCordas(double parametroA, double parametroB, double epsilon);
 
-//Funcao para verificar se f(pontoMedio) = 0 ou se delta eh menoor que o erro
+//Funcao para verificar se f(pontoMedio) = 0 ou se delta eh menor que o erro
 int verificaPontoMedioEDelta(double parametroA, double parametroB, double medio, double epsilon);
 
 //Funcao onde se aproxima da solucao pela esquerda, variando o ponto A
@@ -18,6 +18,9 @@ void fixaBVariaA(double posicaoA, double posicaoB, double desvio);
 
 //Funcao onde se aproxima da solucao pela direita, variando o ponto B
 void fixaAVariaB(double posicaoA, double posicaoB, double desvio);
+
+//Funcao para o calculo atravez do metodo do ponto fixo
+void metodoDoPontoFixo(double pontoB, double pontoDoInterv, double epsilon);
 
 //Armazena mensagens para impressao
 int messagens(int resposta);
@@ -68,6 +71,7 @@ int main(void){
                     //Chamada de funcao dos metodos
                     metodoBissecao(pontoA, pontoB, erro);
                     metodoDasCordas(pontoA, pontoB, erro);
+                    metodoDoPontoFixo(pontoB, pontoInterv, erro);
                 
                 }else{
 
@@ -213,6 +217,14 @@ int messagens(int resposta){
             break;
 
         case 9: printf("\n\nDigite o erro aceitavel: ");
+            break;
+
+        case 10: printf("\n\n\t\t\tMETODO DO PONTO FIXO\n");
+            break;
+
+        case 11: printf("\n  %2s   %13s   %13s   %13s   %13s  ", "n", 
+                "Xn", "g(Xn)", "Xn+1", "f(Xn)");
+            printf("\n----------------------------------------------------------------------");
             break;                   
     
         default:
@@ -291,5 +303,58 @@ void metodoDasCordas(double parametroA, double parametroB, double epsilon){
         fixaAVariaB(parametroA, parametroB, epsilon);
 
     }   
+
+}
+
+void metodoDoPontoFixo(double pontoB, double pontoDoInterv, double epsilon){
+
+    double Xn;              //Primeiro valor a ser ultilizado
+    double XnMaisUm;        //Proximo valor
+    double funcaoDeX;       //funcao principal
+    double funcaoGdeX;      //Funcao g(x)
+    int L = 0;              //Conta interacoes
+
+    XnMaisUm = pontoB + 1;  //garante que Xn+1 - Xn sera maior que epsilon
+    Xn = pontoDoInterv;     //define Xn como o ponto digitado do intervalo
+    
+    //Calculo o f(Xn+1), garantindo que sera maior que o epsilon
+    funcaoDeX = ((atan(XnMaisUm)) - (1/exp(XnMaisUm)));
+    messagens(10);
+    messagens(11);
+
+    //Enquanto o |Xn+1 - Xn| e |f(Xn)| forem maior ou igual ao erro, repete o loop
+    while(((fabs(XnMaisUm - Xn)) >= epsilon) && ((fabs(funcaoDeX)) >= epsilon)){
+        
+        //Nao define a Xn igual XnMaisUm na primera rodada
+        if(L != 0 )Xn = XnMaisUm;
+
+        //Calcula g(Xn) sempre com o anterior a Xn+1
+        funcaoGdeX = tan((1/(exp(Xn))));
+        //Calcula f(Xn) sempre com o anterior a Xn+1
+        funcaoDeX = ((atan(Xn)) - (1/exp(Xn)));
+        XnMaisUm = funcaoGdeX;  //Define o XnMaisUm igual ao g(Xn)
+        
+        printf("\n| %2d | %13.9lf | %13.9lf | %13.9lf | %13.9lf |", 
+        L, Xn, funcaoGdeX, XnMaisUm, funcaoDeX);
+        printf("\n----------------------------------------------------------------------");
+
+        L++; //Incrementa +1 sempre que rodar o loop
+
+    }
+
+    //Se |Xn+1 - Xn| menor que o erro, imprime...
+    if((fabs(XnMaisUm - Xn)) < epsilon){
+        
+        //Imprime a solucao com o erro dado por |Xn+1 - Xn|
+        printf("\n\nSolucao: s = %.9lf +/- %.9lf\n", XnMaisUm, (fabs(XnMaisUm - Xn)));
+        system("pause");
+    
+    }else{
+
+        //Imprime a solucao com o erro dado por |f(Xn)|
+        printf("\n\nSolucao: s = %.9lf +/- %.9lf\n", XnMaisUm, (fabs(funcaoDeX)));
+        system("pause");
+
+    }
 
 }
