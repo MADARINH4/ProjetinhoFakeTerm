@@ -24,40 +24,60 @@ int messagens(int resposta);
 
 int main(void){
 
-    double verifica = 1;            //Controla o loop principal
-    double pontoA = 0;              //Primeiro ponto do iintervalo
-    double pontoB = 1;              //Segundo ponto do iintervalo
-    double erro = 0.0001;           //Erro maximo
-    double funcaoDeA;               //f(a)
-    double funcaoDeB;               //f(b)
+    double pontoA = 0;              //Primeiro ponto do intervalo
+    double pontoB = 0;              //Segundo ponto do intervalo
+    double pontoInterv = 0;         //Ponto contido no intervalo
+    double erro = 0;                //Erro maximo
+    double funcaoDeA = 0;           //f(a)
+    double funcaoDeB = 0;           //f(b)
     
 
-    /*Equanto o produto entre f(a) e f(b) for maior que 0
+    /*Equanto o produto entre f(a) e f(b) for maior ou igual a 0
     , repete o loop ate se digitar um intervalo valido*/
-    while(verifica > 0){
+    while(funcaoDeA * funcaoDeB >= 0){
 
         system("cls");
 
         messagens(1); //Chamada funcao da menssagem 1
-
-        //Scanei os pontos do usuario
-        scanf("%lf%lf", &pontoA, &pontoB);
+        scanf("%lf%lf", &pontoA, &pontoB);  //Scanei os pontos do usuario
 
         //Define funcao no ponto "a" e no ponto "b"
         funcaoDeA = ((atan(pontoA)) - (1/exp(pontoA)));
         funcaoDeB = ((atan(pontoB)) - (1/exp(pontoB)));
 
-        //Calcula valor do produto entre as funcaoes
-        verifica = (funcaoDeA * funcaoDeB);
-
-        /*Se "verifica" menor que 0, entao o produto entre
-        f(a) e f(b) eh menor que 0, logo o intervalo eh
-        valido*/
-        if(verifica < 0){
+        /*Se o produto entre f(a) e f(b) eh menor que 0, logo o intervalo 
+        eh valido*/
+        if((funcaoDeA * funcaoDeB < 0)){
             
-            //Chamada de funcao dos metodos
-            metodoBissecao(pontoA, pontoB, erro);
-            metodoDasCordas(pontoA, pontoB, erro);
+            /*Garante que o ponto esta fora do intervalo para poder entrar
+            na condiçao while*/
+            pontoInterv = pontoB + 1;
+
+            //Equanto o pontoInterv estiver fora do intervalo
+            while((pontoInterv > pontoB) || (pontoInterv < pontoA)){
+                
+                messagens(7);
+                scanf("%lf", &pontoInterv); //Scanei um pontos do usuario
+
+                //Se o pontoInterv estiver dentro do intervalo
+                if((pontoInterv <= pontoB) && (pontoInterv >= pontoA)){
+                    
+                    messagens(9);
+                    scanf("%lf", &erro); //Scanei o erro aceitavel
+
+                    //Chamada de funcao dos metodos
+                    metodoBissecao(pontoA, pontoB, erro);
+                    metodoDasCordas(pontoA, pontoB, erro);
+                
+                }else{
+
+                    system("cls");
+                    messagens(8); //Chamada funcao da menssagem 2
+                    system("pause");
+
+                }
+            
+            }
 
         }else{
 
@@ -184,7 +204,16 @@ int messagens(int resposta){
         case 6: printf("\n  %2s   %13s   %13s   %13s   %13s  ", "n", 
                 "Xn", "Xn+1", "f(Xn+1)", "delta");
             printf("\n----------------------------------------------------------------------");
-            break;                 
+            break;
+
+        case 7: printf("\n\nDigite um ponto no intervalo: ");
+            break;
+
+        case 8: printf("\n\nPonto fora do intervalo digitado\n");
+            break;
+
+        case 9: printf("\n\nDigite o erro aceitavel: ");
+            break;                   
     
         default:
             break;
@@ -240,7 +269,7 @@ void metodoBissecao(double parametroA, double parametroB, double epsilon){
         }
 
         contador++;
-
+        
     }
 
 }
