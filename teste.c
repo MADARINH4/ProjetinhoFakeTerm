@@ -208,7 +208,7 @@ void fixaBVariaA(double posicaoA, double posicaoB, double epsilon){
     double funcaoDeXnMaisUm;     //f(Xn+1)
     int L = 0;                   //Conta interacoes    
 
-    system("cls");               //Limpa a tela
+    //system("cls");               //Limpa a tela
     messagens(5);                //Chama funcao da menssagem 5
     messagens(6);
 
@@ -252,7 +252,7 @@ void fixaAVariaB(double posicaoA, double posicaoB, double epsilon){
     double funcaoDeXnMaisUm;     //f(Xn+1)
     int L = 0;                   //Conta interacoes
 
-    system("cls");               //Limpa a tela
+    //system("cls");               //Limpa a tela
     messagens(5);                //Chama funcao da menssagem 5
     messagens(6);
 
