@@ -22,6 +22,9 @@ void fixaAVariaB(double posicaoA, double posicaoB, double desvio);
 //Funcao para o calculo atravez do metodo do ponto fixo
 void metodoDoPontoFixo(double pontoB, double pontoDoInterv, double epsilon);
 
+//Funcao para o calculo atravez do metodo de Newton Raphson
+void metodoDeNewtonRaphson(double pontoB, double pontoDoInterv, double epsilon);
+
 //Armazena mensagens para impressao
 int messagens(int resposta);
 
@@ -72,6 +75,7 @@ int main(void){
                     metodoBissecao(pontoA, pontoB, erro);
                     metodoDasCordas(pontoA, pontoB, erro);
                     metodoDoPontoFixo(pontoB, pontoInterv, erro);
+                    metodoDeNewtonRaphson(pontoB, pontoInterv, erro);
                 
                 }else{
 
@@ -97,6 +101,59 @@ int main(void){
 
 }
 
+void metodoBissecao(double parametroA, double parametroB, double epsilon){
+
+    int resultado = 0;
+    double pontoMedio;
+    double funcaoDeA;
+    double funcaoDeB;
+    double funcaoDeM;
+    int contador = 0;
+
+    system("cls");
+    messagens(3);
+    messagens(4);
+
+    while(resultado != 1){
+
+        pontoMedio = (parametroA + parametroB)/2;
+
+        resultado = verificaPontoMedioEDelta(parametroA, parametroB, pontoMedio, epsilon);
+
+        funcaoDeA = ((atan(parametroA)) - (1/exp(parametroA)));
+        funcaoDeB = ((atan(parametroB)) - (1/exp(parametroB)));
+        funcaoDeM = ((atan(pontoMedio)) - (1/exp(pontoMedio)));
+
+        printf("\n| %2d | %13.9lf | %13.9lf | %13.9lf | %13.9lf | %13.9lf | %13.9lf |", 
+        contador, parametroA, parametroB, pontoMedio, funcaoDeA, funcaoDeB, funcaoDeM);
+        printf("\n------------------------------------------------------------------------------------------------------");
+
+        if(resultado == 0){
+
+            if((funcaoDeA * funcaoDeM) > 0){
+
+                parametroA = pontoMedio;
+
+            }else if((funcaoDeB * funcaoDeM) > 0){
+
+                parametroB = pontoMedio;
+
+            }
+
+
+        }else{
+
+            printf("\n\nSolucao: s = %.9lf +/- %.9lf\n", pontoMedio, epsilon);
+            system("pause");
+
+        }
+
+        contador++;
+        
+    }
+
+}
+
 int verificaPontoMedioEDelta(double parametroA, double parametroB, double medio, double epsilon){
 
     double funcaoDeM;
@@ -110,6 +167,26 @@ int verificaPontoMedioEDelta(double parametroA, double parametroB, double medio,
     if(delta < epsilon)return 1;
 
     return 0;
+
+}
+
+void metodoDasCordas(double parametroA, double parametroB, double epsilon){
+
+    double funcaoDeA;
+    double derivada2DeA;
+
+    funcaoDeA = ((atan(parametroA)) - (1/exp(parametroA)));
+    derivada2DeA = ((-2 * parametroA)/((1+parametroA*parametroA)*(1+parametroA*parametroA))) - (1/exp(parametroA));
+    
+    if((funcaoDeA * derivada2DeA) < 0){
+
+        fixaBVariaA(parametroA, parametroB, epsilon);
+
+    }else if((funcaoDeA * derivada2DeA) > 0){
+
+        fixaAVariaB(parametroA, parametroB, epsilon);
+
+    }
 
 }
 
@@ -184,6 +261,113 @@ void fixaAVariaB(double posicaoA, double posicaoB, double desvio){
 
 }
 
+void metodoDoPontoFixo(double pontoB, double pontoDoInterv, double epsilon){
+
+    double Xn;              //Primeiro valor a ser ultilizado
+    double XnMaisUm;        //Proximo valor
+    double funcaoDeX;       //Funcao principal
+    double funcaoGdeX;      //Funcao g(x)
+    int L = 0;              //Conta interacoes
+
+    XnMaisUm = pontoB + 1;  //garante que Xn+1 - Xn sera maior que epsilon
+    Xn = pontoDoInterv;     //define Xn como o ponto digitado do intervalo
+    
+    //Calcula o f(Xn+1), garantindo que sera maior que o epsilon
+    funcaoDeX = ((atan(XnMaisUm)) - (1/exp(XnMaisUm)));
+    messagens(10);
+    messagens(11);
+
+    //Enquanto o |Xn+1 - Xn| e |f(Xn)| forem maior ou igual ao erro, repete o loop
+    while(((fabs(XnMaisUm - Xn)) >= epsilon) && ((fabs(funcaoDeX)) >= epsilon)){
+        
+        //Nao define a Xn igual XnMaisUm na primera rodada
+        if(L != 0 )Xn = XnMaisUm;
+
+        //Calcula g(Xn) sempre com o anterior a Xn+1
+        funcaoGdeX = tan((1/(exp(Xn))));
+        //Calcula f(Xn) sempre com o anterior a Xn+1
+        funcaoDeX = ((atan(Xn)) - (1/exp(Xn)));
+        XnMaisUm = funcaoGdeX;  //Define o XnMaisUm igual ao g(Xn)
+        
+        printf("\n| %2d | %13.9lf | %13.9lf | %13.9lf | %13.9lf |", 
+        L, Xn, funcaoGdeX, XnMaisUm, funcaoDeX);
+        printf("\n----------------------------------------------------------------------");
+
+        L++; //Incrementa +1 sempre que rodar o loop
+
+    }
+
+    //Se |Xn+1 - Xn| menor que o erro, imprime...
+    if((fabs(XnMaisUm - Xn)) < epsilon){
+        
+        //Imprime a solucao com o erro dado por |Xn+1 - Xn|
+        printf("\n\nSolucao: s = %.9lf +/- %.9lf\n", XnMaisUm, (fabs(XnMaisUm - Xn)));
+        system("pause");
+    
+    }else{
+
+        //Imprime a solucao com o erro dado por |f(Xn)|
+        printf("\n\nSolucao: s = %.9lf +/- %.9lf\n", XnMaisUm, (fabs(funcaoDeX)));
+        system("pause");
+
+    }
+
+}
+
+void metodoDeNewtonRaphson(double pontoB, double pontoDoInterv, double epsilon){
+
+    double Xn;              //Primeiro valor a ser ultilizado
+    double XnMaisUm;        //Proximo valor
+    double funcaoDeX;       //Funcao principal
+    double derivadaDeX;     //Derivada da Funcao, f'(x)
+    int L = 0;              //Conta interacoes
+
+    XnMaisUm = pontoB + 1;  //define Xn+1 fora do intervalo, garante que entre no loop
+    Xn = pontoDoInterv;     //define Xn como o ponto digitado do intervalo
+    
+    //Calcula o f(Xn+1), garantindo que sera maior que o epsilon
+    funcaoDeX = ((atan(XnMaisUm)) - (1/exp(XnMaisUm)));
+    //derivadaDeX = ((1/(1 + (XnMaisUm * XnMaisUm))) + (1/exp(XnMaisUm)));
+    messagens(12);
+    messagens(13);
+
+    //Enquanto o |(Xn+1 - Xn)/Xn+1| e |f(Xn)| forem maior ou igual ao erro, repete o loop
+    while(((fabs((XnMaisUm - Xn)/XnMaisUm)) >= epsilon) && ((fabs(funcaoDeX)) >= epsilon)){
+        
+        //Nao define a Xn igual XnMaisUm na primera rodada
+        if(L != 0 )Xn = XnMaisUm;
+
+        //Calcula f(Xn) sempre com o anterior a Xn+1
+        funcaoDeX = ((atan(Xn)) - (1/exp(Xn)));
+        //Calcula f'(Xn) sempre com o anterior a Xn+1
+        derivadaDeX = ((1/(1 + (Xn * Xn))) + (1/exp(Xn)));
+        XnMaisUm = (Xn - (funcaoDeX/derivadaDeX));  //Define o XnMaisUm igual ao g(Xn)
+        
+        printf("\n| %2d | %13.9lf | %13.9lf | %13.9lf | %13.9lf |", 
+        L, Xn, funcaoDeX, XnMaisUm, derivadaDeX);
+        printf("\n----------------------------------------------------------------------");
+
+        L++; //Incrementa +1 sempre que rodar o loop
+
+    }
+
+    //Se |Xn+1 - Xn| menor que o erro, imprime...
+    if((fabs((XnMaisUm - Xn)/XnMaisUm)) < epsilon){
+        
+        //Imprime a solucao com o erro dado por |(Xn+1 - Xn)/Xn+1|
+        printf("\n\nSolucao: s = %.9lf +/- %.9lf\n", XnMaisUm, (fabs((XnMaisUm - Xn)/XnMaisUm)));
+        system("pause");
+    
+    }else{
+
+        //Imprime a solucao com o erro dado por |f(Xn)|
+        printf("\n\nSolucao: s = %.9lf +/- %.9lf\n", XnMaisUm, (fabs(funcaoDeX)));
+        system("pause");
+
+    }
+
+}
+
 int messagens(int resposta){
 
     switch (resposta){
@@ -225,136 +409,18 @@ int messagens(int resposta){
         case 11: printf("\n  %2s   %13s   %13s   %13s   %13s  ", "n", 
                 "Xn", "g(Xn)", "Xn+1", "f(Xn)");
             printf("\n----------------------------------------------------------------------");
-            break;                   
+            break;
+
+        case 12: printf("\n\n\t\t\tMETODO DE NEWTON RAPHSON\n");
+            break;
+
+        case 13: printf("\n  %2s   %13s   %13s   %13s   %13s  ", "n", 
+                "Xn", "f(Xn)", "Xn+1", "f'(Xn)");
+            printf("\n----------------------------------------------------------------------");
+            break;                     
     
         default:
             break;
-    }
-
-}
-
-void metodoBissecao(double parametroA, double parametroB, double epsilon){
-
-    int resultado = 0;
-    double pontoMedio;
-    double funcaoDeA;
-    double funcaoDeB;
-    double funcaoDeM;
-    int contador = 0;
-
-    system("cls");
-    messagens(3);
-    messagens(4);
-
-    while(resultado != 1){
-
-        pontoMedio = (parametroA + parametroB)/2;
-
-        resultado = verificaPontoMedioEDelta(parametroA, parametroB, pontoMedio, epsilon);
-
-        funcaoDeA = ((atan(parametroA)) - (1/exp(parametroA)));
-        funcaoDeB = ((atan(parametroB)) - (1/exp(parametroB)));
-        funcaoDeM = ((atan(pontoMedio)) - (1/exp(pontoMedio)));
-
-        printf("\n| %2d | %13.9lf | %13.9lf | %13.9lf | %13.9lf | %13.9lf | %13.9lf |", 
-        contador, parametroA, parametroB, pontoMedio, funcaoDeA, funcaoDeB, funcaoDeM);
-        printf("\n------------------------------------------------------------------------------------------------------");
-
-        if(resultado == 0){
-
-            if((funcaoDeA * funcaoDeM) > 0){
-
-                parametroA = pontoMedio;
-
-            }else if((funcaoDeB * funcaoDeM) > 0){
-
-                parametroB = pontoMedio;
-
-            }
-
-
-        }else{
-
-            printf("\n\nSolucao: s = %.9lf +/- %.9lf\n", pontoMedio, epsilon);
-            system("pause");
-
-        }
-
-        contador++;
-        
-    }
-
-}
-
-void metodoDasCordas(double parametroA, double parametroB, double epsilon){
-
-    double funcaoDeA;
-    double derivada2DeA;
-
-    funcaoDeA = ((atan(parametroA)) - (1/exp(parametroA)));
-    derivada2DeA = ((-2 * parametroA)/((1+parametroA*parametroA)*(1+parametroA*parametroA))) - (1/exp(parametroA));
-    
-    if((funcaoDeA * derivada2DeA) < 0){
-
-        fixaBVariaA(parametroA, parametroB, epsilon);
-
-    }else if((funcaoDeA * derivada2DeA) > 0){
-
-        fixaAVariaB(parametroA, parametroB, epsilon);
-
-    }   
-
-}
-
-void metodoDoPontoFixo(double pontoB, double pontoDoInterv, double epsilon){
-
-    double Xn;              //Primeiro valor a ser ultilizado
-    double XnMaisUm;        //Proximo valor
-    double funcaoDeX;       //funcao principal
-    double funcaoGdeX;      //Funcao g(x)
-    int L = 0;              //Conta interacoes
-
-    XnMaisUm = pontoB + 1;  //garante que Xn+1 - Xn sera maior que epsilon
-    Xn = pontoDoInterv;     //define Xn como o ponto digitado do intervalo
-    
-    //Calculo o f(Xn+1), garantindo que sera maior que o epsilon
-    funcaoDeX = ((atan(XnMaisUm)) - (1/exp(XnMaisUm)));
-    messagens(10);
-    messagens(11);
-
-    //Enquanto o |Xn+1 - Xn| e |f(Xn)| forem maior ou igual ao erro, repete o loop
-    while(((fabs(XnMaisUm - Xn)) >= epsilon) && ((fabs(funcaoDeX)) >= epsilon)){
-        
-        //Nao define a Xn igual XnMaisUm na primera rodada
-        if(L != 0 )Xn = XnMaisUm;
-
-        //Calcula g(Xn) sempre com o anterior a Xn+1
-        funcaoGdeX = tan((1/(exp(Xn))));
-        //Calcula f(Xn) sempre com o anterior a Xn+1
-        funcaoDeX = ((atan(Xn)) - (1/exp(Xn)));
-        XnMaisUm = funcaoGdeX;  //Define o XnMaisUm igual ao g(Xn)
-        
-        printf("\n| %2d | %13.9lf | %13.9lf | %13.9lf | %13.9lf |", 
-        L, Xn, funcaoGdeX, XnMaisUm, funcaoDeX);
-        printf("\n----------------------------------------------------------------------");
-
-        L++; //Incrementa +1 sempre que rodar o loop
-
-    }
-
-    //Se |Xn+1 - Xn| menor que o erro, imprime...
-    if((fabs(XnMaisUm - Xn)) < epsilon){
-        
-        //Imprime a solucao com o erro dado por |Xn+1 - Xn|
-        printf("\n\nSolucao: s = %.9lf +/- %.9lf\n", XnMaisUm, (fabs(XnMaisUm - Xn)));
-        system("pause");
-    
-    }else{
-
-        //Imprime a solucao com o erro dado por |f(Xn)|
-        printf("\n\nSolucao: s = %.9lf +/- %.9lf\n", XnMaisUm, (fabs(funcaoDeX)));
-        system("pause");
-
     }
 
 }
