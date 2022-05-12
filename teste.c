@@ -297,14 +297,11 @@ void metodoDoPontoFixo(double pontoB, double pontoDoInterv, double epsilon){
 
     XnMaisUm = pontoB + 1;  //garante que Xn+1 - Xn sera maior que epsilon
     Xn = pontoDoInterv;     //define Xn como o ponto digitado do intervalo
-    
-    //Calcula o f(Xn+1), garantindo que sera maior que o epsilon
-    funcaoDeX = ((atan(XnMaisUm)) - (1/exp(XnMaisUm)));
     messagens(10);
     messagens(11);
 
-    //Enquanto o |Xn+1 - Xn| e |f(Xn)| forem maior ou igual ao erro, repete o loop
-    while(((fabs(XnMaisUm - Xn)) >= epsilon) && ((fabs(funcaoDeX)) >= epsilon)){
+    //Enquanto o |Xn+1 - Xn| for maior ou igual ao erro, repete o loop
+    while(((fabs(XnMaisUm - Xn)) >= epsilon)){
         
         //Nao define a Xn igual XnMaisUm na primera rodada
         if(L != 0 )Xn = XnMaisUm;
@@ -323,20 +320,9 @@ void metodoDoPontoFixo(double pontoB, double pontoDoInterv, double epsilon){
 
     }
 
-    //Se |Xn+1 - Xn| menor que o erro, imprime...
-    if((fabs(XnMaisUm - Xn)) < epsilon){
-        
         //Imprime a solucao com o erro dado por |Xn+1 - Xn|
-        printf("\n\nSolucao: s = %.9lf +/- %.9lf\n", XnMaisUm, (fabs(XnMaisUm - Xn)));
-        system("pause");
-    
-    }else{
-
-        //Imprime a solucao com o erro dado por |f(Xn)|
-        printf("\n\nSolucao: s = %.9lf +/- %.9lf\n", XnMaisUm, (fabs(funcaoDeX)));
-        system("pause");
-
-    }
+    printf("\n\nSolucao: s = %.9lf +/- %.9lf\n", XnMaisUm, (fabs(XnMaisUm - Xn)));
+    system("pause");
 
 }
 
@@ -350,15 +336,11 @@ void metodoDeNewtonRaphson(double pontoB, double pontoDoInterv, double epsilon){
 
     XnMaisUm = pontoB + 1;  //define Xn+1 fora do intervalo, garante que entre no loop
     Xn = pontoDoInterv;     //define Xn como o ponto digitado do intervalo
-    
-    //Calcula o f(Xn+1), garantindo que sera maior que o epsilon
-    funcaoDeX = ((atan(XnMaisUm)) - (1/exp(XnMaisUm)));
-    //derivadaDeX = ((1/(1 + (XnMaisUm * XnMaisUm))) + (1/exp(XnMaisUm)));
     messagens(12);
     messagens(13);
 
-    //Enquanto o |(Xn+1 - Xn)/Xn+1| e |f(Xn)| forem maior ou igual ao erro, repete o loop
-    while(((fabs((XnMaisUm - Xn)/XnMaisUm)) >= epsilon) && ((fabs(funcaoDeX)) >= epsilon)){
+    //Enquanto o |Xn+1 - Xn| for maior ou igual ao erro, repete o loop
+    while(((fabs((XnMaisUm - Xn))) >= epsilon)){
         
         //Nao define a Xn igual XnMaisUm na primera rodada
         if(L != 0 )Xn = XnMaisUm;
@@ -377,20 +359,9 @@ void metodoDeNewtonRaphson(double pontoB, double pontoDoInterv, double epsilon){
 
     }
 
-    //Se |Xn+1 - Xn| menor que o erro, imprime...
-    if((fabs((XnMaisUm - Xn)/XnMaisUm)) < epsilon){
-        
-        //Imprime a solucao com o erro dado por |(Xn+1 - Xn)/Xn+1|
-        printf("\n\nSolucao: s = %.9lf +/- %.9lf\n", XnMaisUm, (fabs((XnMaisUm - Xn)/XnMaisUm)));
-        system("pause");
-    
-    }else{
-
-        //Imprime a solucao com o erro dado por |f(Xn)|
-        printf("\n\nSolucao: s = %.9lf +/- %.9lf\n", XnMaisUm, (fabs(funcaoDeX)));
-        system("pause");
-
-    }
+    //Imprime a solucao com o erro dado por |Xn+1 - Xn|
+    printf("\n\nSolucao: s = %.9lf +/- %.9lf\n", XnMaisUm, (fabs((XnMaisUm - Xn))));
+    system("pause");
 
 }
 
