@@ -218,7 +218,7 @@ void fixaBVariaA(double posicaoA, double posicaoB, double epsilon){
     delta = epsilon + 1;         //Garante o delta maior que o erro
 
     //Enquanto delta maior que o erro dado, repete o loop
-    while(delta > epsilon){
+    while(delta >= epsilon){
 
         funcaoDeXn = ((atan(Xn)) - (1/exp(Xn)));    //Calcula o f(Xn)
         //Calcula o Xn+1 atravez da formula
@@ -237,6 +237,7 @@ void fixaBVariaA(double posicaoA, double posicaoB, double epsilon){
 
     }
 
+    //Imprime a solucao com o erro dado por |Xn+1 - Xn|
     printf("\n\nSolucao: s = %.9lf +/- %.9lf\n", XnMaisUm, epsilon);
     system("pause");
 
@@ -262,7 +263,7 @@ void fixaAVariaB(double posicaoA, double posicaoB, double epsilon){
     delta = epsilon + 1;         //Garante o delta maior que o erro
 
     //Enquanto delta maior que o erro dado, repete o loop
-    while(delta > epsilon){
+    while(delta >= epsilon){
 
         funcaoDeXn = ((atan(Xn)) - (1/exp(Xn)));   //Calcula o f(Xn)
         //Calcula o Xn+1 atravez da formula
@@ -281,7 +282,7 @@ void fixaAVariaB(double posicaoA, double posicaoB, double epsilon){
 
     }
 
-
+    //Imprime a solucao com o erro dado por |Xn+1 - Xn|
     printf("\n\nSolucao: s = %.9lf +/- %.9lf\n", XnMaisUm, delta);
     system("pause");
 
@@ -320,7 +321,7 @@ void metodoDoPontoFixo(double pontoB, double pontoDoInterv, double epsilon){
 
     }
 
-        //Imprime a solucao com o erro dado por |Xn+1 - Xn|
+    //Imprime a solucao com o erro dado por |Xn+1 - Xn|
     printf("\n\nSolucao: s = %.9lf +/- %.9lf\n", XnMaisUm, (fabs(XnMaisUm - Xn)));
     system("pause");
 
