@@ -68,19 +68,35 @@ int main(void){
                 //Se o pontoInterv estiver dentro do intervalo
                 if((pontoInterv <= pontoB) && (pontoInterv >= pontoA)){
                     
-                    messagens(9);
-                    scanf("%lf", &erro); //Scanei o erro aceitavel
+                    //Enquanto o erro não for entre 0 e 1
+                    while((erro <= 0) || (erro >= 1)){
+                        
+                        messagens(9);
+                        scanf("%lf", &erro); //Scanei um pontos do usuario
+                        
+                        //Se o erro estiver entre 0 e 1
+                        if((erro > 0) && (erro < 1)){
 
-                    //Chamada de funcao dos metodos
-                    metodoBissecao(pontoA, pontoB, erro);
-                    metodoDasCordas(pontoA, pontoB, erro);
-                    metodoDoPontoFixo(pontoB, pontoInterv, erro);
-                    metodoDeNewtonRaphson(pontoB, pontoInterv, erro);
+                            //Chamada de funcao dos metodos
+                            metodoBissecao(pontoA, pontoB, erro);
+                            metodoDasCordas(pontoA, pontoB, erro);
+                            metodoDoPontoFixo(pontoB, pontoInterv, erro);
+                            metodoDeNewtonRaphson(pontoB, pontoInterv, erro);
+                        
+                        }else{
+
+                            system("cls");
+                            messagens(14); //Chamada funcao da menssagem 14
+                            system("pause");
+
+                        }
+                    
+                    }
                 
                 }else{
 
                     system("cls");
-                    messagens(8); //Chamada funcao da menssagem 2
+                    messagens(8); //Chamada funcao da menssagem 8
                     system("pause");
 
                 }
@@ -417,6 +433,9 @@ int messagens(int resposta){
         case 13: printf("\n  %2s   %13s   %13s   %13s   %13s  ", "n", 
                 "Xn", "f(Xn)", "Xn+1", "f'(Xn)");
             printf("\n----------------------------------------------------------------------");
+            break;
+
+        case 14: printf("\n\nErro invalido digitado\n");
             break;                     
     
         default:
