@@ -133,7 +133,7 @@ double funcaoInteracao(double Xn){
 
 void metodoBissecao(double parametroA, double parametroB, double epsilon){
 
-    double pontoMedio = 1;       //Armazena o ponto medio
+    double pontoMedio;       //Armazena o ponto medio
     double delta;                //Armazena o erro calculado |b - a|
     int L = 0;                   //Conta interacoes
 
@@ -142,8 +142,8 @@ void metodoBissecao(double parametroA, double parametroB, double epsilon){
     messagens(3);                //Chama funcao da menssagem 4
     messagens(4);
     
-    //Enquanto o delta for maior ou igual ao erro e f(m) diferente de zero, faca...
-    while((delta >= epsilon) && (funcaoPrincipal(pontoMedio) != 0)){
+    //Enquanto o delta for maior ou igual ao erro...
+    while((delta >= epsilon)){
         
         pontoMedio = (parametroA + parametroB)/2; //Calcula o ponto medio
         delta = fabs(parametroB - parametroA);    //Calcula o |b - a|
