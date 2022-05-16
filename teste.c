@@ -16,11 +16,8 @@ void metodoBissecao(double parametroA, double parametroB, double epsilon);
 //Funcao para o calculo atravez do metodo das cordas
 void metodoDasCordas(double parametroA, double parametroB, double epsilon);
 
-//Funcao onde se aproxima da solucao pela esquerda, variando o ponto A
-void fixaBVariaA(double posicaoA, double posicaoB, double desvio);
-
-//Funcao onde se aproxima da solucao pela direita, variando o ponto B
-void fixaAVariaB(double posicaoA, double posicaoB, double desvio);
+//Funcao onde se aproxima da solucao dependendo da chamanda de funcao
+void fixaVaria(double posicaoA, double posicaoB, double desvio);
 
 //Funcao para o calculo atravez do metodo do ponto fixo
 void metodoDoPontoFixo(double pontoB, double pontoDoInterv, double epsilon);
@@ -185,18 +182,18 @@ void metodoDasCordas(double parametroA, double parametroB, double epsilon){
     //Se (f(a) * f"(a)) < 0, chama a fucao fixaBVariaA
     if((funcaoPrincipal(parametroA) * funcao2Derivada(parametroA)) < 0){
 
-        fixaBVariaA(parametroA, parametroB, epsilon);
+        fixaVaria(parametroA, parametroB, epsilon);
 
-     //Se (f(a) * f"(a)) > 0, chama a fucao fixaAVariaB   
+     //Se (f(a) * f"(a)) > 0, chama a fucao fixaAVariaB
     }else if(funcaoPrincipal(parametroA) * funcao2Derivada(parametroA) > 0){
 
-        fixaAVariaB(parametroA, parametroB, epsilon);
+        fixaVaria(parametroB, parametroA, epsilon);
 
     }
 
 }
 
-void fixaBVariaA(double posicaoA, double posicaoB, double epsilon){
+void fixaVaria(double posicao1, double posicao2, double epsilon){
 
     double Xn;                   //Primeiro valor a ser ultilizado
     double XnMaisUm;             //Proximo valor
@@ -206,53 +203,18 @@ void fixaBVariaA(double posicaoA, double posicaoB, double epsilon){
     messagens(5);                //Chama funcao da menssagem 5
     messagens(6);
 
-    Xn = posicaoA;               //Define Xn como ponto A que irá variar
+    Xn = posicao1;               //Define Xn como ponto A que irá variar
     delta = epsilon + 1;         //Garante o delta maior que o erro
 
     //Enquanto delta maior que o erro dado, repete o loop
     while(delta >= epsilon){
 
         //Calcula o Xn + 1
-        XnMaisUm = Xn + ((funcaoPrincipal(Xn)/(funcaoPrincipal(posicaoB) - funcaoPrincipal(Xn))) * (Xn - posicaoB));
+        XnMaisUm = Xn + ((funcaoPrincipal(Xn)/(funcaoPrincipal(posicao2) - funcaoPrincipal(Xn))) * (Xn - posicao2));
         delta = fabs(Xn - XnMaisUm);  //Define o delta como |Xn - Xn+1|
 
         printf("\n| %2d | %13.9lf | %13.9lf | %13.9lf | %13.9lf |", 
-        L, posicaoA, XnMaisUm, funcaoPrincipal(XnMaisUm), delta);
-        printf("\n----------------------------------------------------------------------");
-
-        Xn = XnMaisUm;           //Xn passa a ser Xn+1 anterior
-        L++;                     //Incrementa +1
-
-    }
-
-    //Imprime a solucao com o erro dado por |Xn+1 - Xn|
-    printf("\n\nSolucao: s = %.9lf +/- %.9lf\n", XnMaisUm, delta);
-    system("pause");
-
-}
-
-void fixaAVariaB(double posicaoA, double posicaoB, double epsilon){
-
-    double Xn;                   //Primeiro valor a ser ultilizado
-    double XnMaisUm;             //Proximo valor
-    double delta;                //Armazena o erro calculado |Xn - XnMaisUm|
-    int L = 0;                   //Conta interacoes
-
-    messagens(5);                //Chama funcao da menssagem 5
-    messagens(6);
-
-    Xn = posicaoB;               //Define Xn como ponto B que irá variar
-    delta = epsilon + 1;         //Garante o delta maior que o erro
-
-    //Enquanto delta maior que o erro dado, repete o loop
-    while(delta >= epsilon){
-
-        //Calcula o Xn + 1
-        XnMaisUm = Xn + ((funcaoPrincipal(Xn)/(funcaoPrincipal(posicaoA) - funcaoPrincipal(Xn))) * (Xn - posicaoA));
-        delta = fabs(Xn - XnMaisUm);  //Define o delta como |Xn - Xn+1|
-
-        printf("\n| %2d | %13.9lf | %13.9lf | %13.9lf | %13.9lf |",
-        L, Xn, XnMaisUm, funcaoPrincipal(XnMaisUm), delta);
+        L, posicao1, XnMaisUm, funcaoPrincipal(XnMaisUm), delta);
         printf("\n----------------------------------------------------------------------");
 
         Xn = XnMaisUm;           //Xn passa a ser Xn+1 anterior
