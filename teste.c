@@ -212,9 +212,9 @@ void fixaBVariaA(double posicaoA, double posicaoB, double epsilon){
     //Enquanto delta maior que o erro dado, repete o loop
     while(delta >= epsilon){
 
+        //Calcula o Xn + 1
         XnMaisUm = Xn + ((funcaoPrincipal(Xn)/(funcaoPrincipal(posicaoB) - funcaoPrincipal(Xn))) * (Xn - posicaoB));
-        //Define o delta como |Xn - Xn+1|
-        delta = fabs(Xn - XnMaisUm);
+        delta = fabs(Xn - XnMaisUm);  //Define o delta como |Xn - Xn+1|
 
         printf("\n| %2d | %13.9lf | %13.9lf | %13.9lf | %13.9lf |", 
         L, posicaoA, XnMaisUm, funcaoPrincipal(XnMaisUm), delta);
@@ -247,11 +247,11 @@ void fixaAVariaB(double posicaoA, double posicaoB, double epsilon){
     //Enquanto delta maior que o erro dado, repete o loop
     while(delta >= epsilon){
 
+        //Calcula o Xn + 1
         XnMaisUm = Xn + ((funcaoPrincipal(Xn)/(funcaoPrincipal(posicaoA) - funcaoPrincipal(Xn))) * (Xn - posicaoA));
-        //Define o delta como |Xn - Xn+1|
-        delta = fabs(Xn - XnMaisUm);
+        delta = fabs(Xn - XnMaisUm);  //Define o delta como |Xn - Xn+1|
 
-        printf("\n| %2d | %13.9lf | %13.9lf | %13.9lf | %13.9lf |", 
+        printf("\n| %2d | %13.9lf | %13.9lf | %13.9lf | %13.9lf |",
         L, Xn, XnMaisUm, funcaoPrincipal(XnMaisUm), delta);
         printf("\n----------------------------------------------------------------------");
 
@@ -287,7 +287,7 @@ void metodoDoPontoFixo(double pontoB, double pontoDoInterv, double epsilon){
         XnMaisUm = funcaoInteracao(Xn);  //Define o XnMaisUm igual ao g(Xn)
         delta = fabs(XnMaisUm - Xn);     //Define delta como |Xn - XnMaisUm|
 
-        printf("\n| %2d | %13.9lf | %13.9lf | %13.9lf | %13.9lf |", 
+        printf("\n| %2d | %13.9lf | %13.9lf | %13.9lf | %13.9lf |",
         L, Xn, funcaoPrincipal(Xn), XnMaisUm, delta);
         printf("\n----------------------------------------------------------------------");
 
