@@ -11,19 +11,19 @@ double funcao2Derivada(double Xn);
 double funcaoInteracao(double Xn);
 
 //Funcao para o calculo atravez do metodo da bissacao
-void metodoBissecao(double parametroA, double parametroB, double epsilon);
+void metodoBissecao(double pontoA, double pontoB, double epsilon);
 
 //Funcao para o calculo atravez do metodo das cordas
-void metodoDasCordas(double parametroA, double parametroB, double epsilon);
+void metodoDasCordas(double pontoA, double pontoB, double epsilon);
 
 //Funcao onde se aproxima da solucao dependendo da chamanda de funcao
 void fixaVaria(double posicaoA, double posicaoB, double desvio);
 
 //Funcao para o calculo atravez do metodo do ponto fixo
-void metodoDoPontoFixo(double pontoB, double pontoDoInterv, double epsilon);
+void metodoDoPontoFixo(double pontoDoInterv, double epsilon);
 
 //Funcao para o calculo atravez do metodo de Newton Raphson
-void metodoDeNewtonRaphson(double pontoB, double pontoDoInterv, double epsilon);
+void metodoDeNewtonRaphson(double pontoDoInterv, double epsilon);
 
 //Armazena mensagens para impressao
 int messagens(int resposta);
@@ -33,7 +33,7 @@ int main(void){
     double pontoA = 0;              //Primeiro ponto do intervalo
     double pontoB = 0;              //Segundo ponto do intervalo
     double pontoInterv = 0;         //Ponto contido no intervalo
-    double tolerancia = 0;                //Tolerancia maximo
+    double tolerancia = 0;          //Tolerancia maximo
     
     /*Equanto o produto entre f(a) e f(b) for maior ou igual a 0
     , repete o loop ate se digitar um intervalo valido*/
@@ -73,8 +73,8 @@ int main(void){
                             //Chamada de funcao dos metodos
                             metodoBissecao(pontoA, pontoB, tolerancia);
                             metodoDasCordas(pontoA, pontoB, tolerancia);
-                            metodoDoPontoFixo(pontoB, pontoInterv, tolerancia);
-                            metodoDeNewtonRaphson(pontoB, pontoInterv, tolerancia);
+                            metodoDoPontoFixo(pontoInterv, tolerancia);
+                            metodoDeNewtonRaphson(pontoInterv, tolerancia);
                         
                         }else{
 
@@ -131,7 +131,7 @@ double funcaoInteracao(double Xn){
 
 }
 
-void metodoBissecao(double parametroA, double parametroB, double epsilon){
+void metodoBissecao(double pontoA, double pontoB, double epsilon){
 
     double pontoMedio;           //Armazena o ponto medio
     double delta;                //Armazena o erro calculado |b - a|
@@ -145,22 +145,22 @@ void metodoBissecao(double parametroA, double parametroB, double epsilon){
     //Enquanto o delta for maior ou igual a tolerancia...
     while((delta >= epsilon)){
         
-        pontoMedio = (parametroA + parametroB)/2; //Calcula o ponto medio
-        delta = fabs(parametroB - parametroA);    //Calcula o |b - a|
+        pontoMedio = (pontoA + pontoB)/2; //Calcula o ponto medio
+        delta = fabs(pontoB - pontoA);    //Calcula o |b - a|
 
         printf("\n| %2d | %13.9lf | %13.9lf | %13.9lf | %13.9lf | %13.9lf | %13.9lf | %13.9lf |", 
-        L, parametroA, parametroB, pontoMedio, funcaoPrincipal(parametroA), funcaoPrincipal(parametroB), funcaoPrincipal(pontoMedio), delta);
+        L, pontoA, pontoB, pontoMedio, funcaoPrincipal(pontoA), funcaoPrincipal(pontoB), funcaoPrincipal(pontoMedio), delta);
         printf("\n----------------------------------------------------------------------------------------------------------------------");
 
-        //Se (f(a) * f(m)) > 0 entao o novo parametroA eh definido como o pontoMedio
-        if((funcaoPrincipal(parametroA) * funcaoPrincipal(pontoMedio)) > 0){
+        //Se (f(a) * f(m)) > 0 entao o novo pontoA eh definido como o pontoMedio
+        if((funcaoPrincipal(pontoA) * funcaoPrincipal(pontoMedio)) > 0){
 
-            parametroA = pontoMedio;
+            pontoA = pontoMedio;
 
-        //Se (f(b) * f(m)) > 0 entao o novo parametroB eh definido como o pontoMedio
-        }else if((funcaoPrincipal(parametroB) * funcaoPrincipal(pontoMedio)) > 0){
+        //Se (f(b) * f(m)) > 0 entao o novo pontoB eh definido como o pontoMedio
+        }else if((funcaoPrincipal(pontoB) * funcaoPrincipal(pontoMedio)) > 0){
 
-            parametroB = pontoMedio;
+            pontoB = pontoMedio;
 
         }
         //Se delta for menor que a tolerancia
@@ -177,17 +177,17 @@ void metodoBissecao(double parametroA, double parametroB, double epsilon){
 
 }
 
-void metodoDasCordas(double parametroA, double parametroB, double epsilon){
+void metodoDasCordas(double pontoA, double pontoB, double epsilon){
     
     //Se (f(a) * f"(a)) < 0, chama a fucao fixaBVariaA
-    if((funcaoPrincipal(parametroA) * funcao2Derivada(parametroA)) < 0){
+    if((funcaoPrincipal(pontoA) * funcao2Derivada(pontoA)) < 0){
 
-        fixaVaria(parametroA, parametroB, epsilon);
+        fixaVaria(pontoA, pontoB, epsilon);
 
      //Se (f(a) * f"(a)) > 0, chama a fucao fixaAVariaB
-    }else if(funcaoPrincipal(parametroA) * funcao2Derivada(parametroA) > 0){
+    }else if(funcaoPrincipal(pontoA) * funcao2Derivada(pontoA) > 0){
 
-        fixaVaria(parametroB, parametroA, epsilon);
+        fixaVaria(pontoB, pontoA, epsilon);
 
     }
 
@@ -203,7 +203,7 @@ void fixaVaria(double posicao1, double posicao2, double epsilon){
     messagens(5);                //Chama funcao da menssagem 5
     messagens(6);
 
-    Xn = posicao1;               //Define Xn como posicao1, que pode serr o A ou o B
+    Xn = posicao1;               //Define Xn como posicao1, que pode ser o A ou B
     delta = epsilon + 1;         //Garante o delta maior que o erro
 
     //Enquanto delta maior ou igual a tolerancia, repete o loop
@@ -228,7 +228,7 @@ void fixaVaria(double posicao1, double posicao2, double epsilon){
 
 }
 
-void metodoDoPontoFixo(double pontoB, double pontoDoInterv, double epsilon){
+void metodoDoPontoFixo(double pontoDoInterv, double epsilon){
 
     double Xn;                   //Primeiro valor a ser ultilizado
     double XnMaisUm;             //Proximo valor
@@ -263,7 +263,7 @@ void metodoDoPontoFixo(double pontoB, double pontoDoInterv, double epsilon){
 
 }
 
-void metodoDeNewtonRaphson(double pontoB, double pontoDoInterv, double epsilon){
+void metodoDeNewtonRaphson(double pontoDoInterv, double epsilon){
 
     double Xn;                   //Primeiro valor a ser ultilizado
     double XnMaisUm;             //Proximo valor
