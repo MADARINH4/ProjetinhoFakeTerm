@@ -138,7 +138,7 @@ double funcao2Derivada(double Xn){
     return ((-2 * Xn)/((1+Xn*Xn)*(1+Xn*Xn))) - (1/exp(Xn));
 
 }
-double funcaoIteracao(double Xn){
+double funcaoInteracao(double Xn){
 
     return tan((1/(exp(Xn))));
 

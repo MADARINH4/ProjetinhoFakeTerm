@@ -33,7 +33,7 @@ int main(void){
     double pontoA = 0;              //Primeiro ponto do intervalo
     double pontoB = 0;              //Segundo ponto do intervalo
     double pontoInterv = 0;         //Ponto contido no intervalo
-    double erro = 0;                //Erro maximo
+    double tolerancia = 0;                //Tolerancia maximo
     
     /*Equanto o produto entre f(a) e f(b) for maior ou igual a 0
     , repete o loop ate se digitar um intervalo valido*/
@@ -62,19 +62,19 @@ int main(void){
                 if((pontoInterv <= pontoB) && (pontoInterv >= pontoA)){
                     
                     //Enquanto o erro não for entre 0 e 1
-                    while((erro <= 0) || (erro >= 1)){
+                    while((tolerancia <= 0) || (tolerancia >= 1)){
                         
                         messagens(9);
-                        scanf("%lf", &erro); //Scanei um pontos do usuario
+                        scanf("%lf", &tolerancia); //Scanei um pontos do usuario
                         
                         //Se o erro estiver entre 0 e 1
-                        if((erro > 0) && (erro < 1)){
+                        if((tolerancia > 0) && (tolerancia < 1)){
 
                             //Chamada de funcao dos metodos
-                            metodoBissecao(pontoA, pontoB, erro);
-                            metodoDasCordas(pontoA, pontoB, erro);
-                            metodoDoPontoFixo(pontoB, pontoInterv, erro);
-                            metodoDeNewtonRaphson(pontoB, pontoInterv, erro);
+                            metodoBissecao(pontoA, pontoB, tolerancia);
+                            metodoDasCordas(pontoA, pontoB, tolerancia);
+                            metodoDoPontoFixo(pontoB, pontoInterv, tolerancia);
+                            metodoDeNewtonRaphson(pontoB, pontoInterv, tolerancia);
                         
                         }else{
 
@@ -133,7 +133,7 @@ double funcaoInteracao(double Xn){
 
 void metodoBissecao(double parametroA, double parametroB, double epsilon){
 
-    double pontoMedio;       //Armazena o ponto medio
+    double pontoMedio;           //Armazena o ponto medio
     double delta;                //Armazena o erro calculado |b - a|
     int L = 0;                   //Conta interacoes
 
@@ -142,7 +142,7 @@ void metodoBissecao(double parametroA, double parametroB, double epsilon){
     messagens(3);                //Chama funcao da menssagem 4
     messagens(4);
     
-    //Enquanto o delta for maior ou igual ao erro...
+    //Enquanto o delta for maior ou igual a tolerancia...
     while((delta >= epsilon)){
         
         pontoMedio = (parametroA + parametroB)/2; //Calcula o ponto medio
@@ -163,8 +163,8 @@ void metodoBissecao(double parametroA, double parametroB, double epsilon){
             parametroB = pontoMedio;
 
         }
-        //Se delta for menor que o erro ou f(m) = 0
-        if((delta < epsilon) || (funcaoPrincipal(pontoMedio) == 0)){
+        //Se delta for menor que a tolerancia
+        if((delta < epsilon)){
 
             printf("\n\nSolucao: s = %.9lf +/- %.9lf\n", pontoMedio, delta);
             system("pause");
@@ -203,10 +203,10 @@ void fixaVaria(double posicao1, double posicao2, double epsilon){
     messagens(5);                //Chama funcao da menssagem 5
     messagens(6);
 
-    Xn = posicao1;               //Define Xn como ponto A que irá variar
+    Xn = posicao1;               //Define Xn como posicao1, que pode serr o A ou o B
     delta = epsilon + 1;         //Garante o delta maior que o erro
 
-    //Enquanto delta maior que o erro dado, repete o loop
+    //Enquanto delta maior ou igual a tolerancia, repete o loop
     while(delta >= epsilon){
 
         //Calcula o Xn + 1
@@ -240,7 +240,7 @@ void metodoDoPontoFixo(double pontoB, double pontoDoInterv, double epsilon){
     messagens(10);
     messagens(11);
 
-    //Enquanto o delta for maior ou igual ao erro, repete o loop
+    //Enquanto o delta for maior ou igual a tolerancia, repete o loop
     while(delta >= epsilon){
         
         //Nao define a Xn igual XnMaisUm na primera rodada
@@ -275,7 +275,7 @@ void metodoDeNewtonRaphson(double pontoB, double pontoDoInterv, double epsilon){
     messagens(12);
     messagens(13);
 
-    //Enquanto o delta for maior ou igual ao erro, repete o loop
+    //Enquanto o delta for maior ou igual a tolerancia, repete o loop
     while(delta >= epsilon){
         
         //Nao define a Xn igual XnMaisUm na primera rodada
@@ -332,7 +332,7 @@ int messagens(int resposta){
         case 8: printf("\n\nPonto fora do intervalo digitado\n");
             break;
 
-        case 9: printf("\n\nDigite o erro aceitavel: ");
+        case 9: printf("\n\nDigite uma tolerancia aceitavel: ");
             break;
 
         case 10: printf("\n\n\t\t\tMETODO DO PONTO FIXO\n");
