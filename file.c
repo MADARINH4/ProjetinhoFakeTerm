@@ -11,25 +11,22 @@ double funcao2Derivada(double Xn);
 double funcaoInteracao(double Xn);
 
 //Funcao para o calculo atravez do metodo da bissacao
-void metodoBissecao(double parametroA, double parametroB, double epsilon);
-
-//Funcao para verificar se f(pontoMedio) = 0 ou se delta eh menor que o erro
-int verificaPontoMedioEDelta(double parametroA, double parametroB, double medio, double epsilon);
+void metodoBissecao(double pontoA, double pontoB, double epsilon);
 
 //Funcao para o calculo atravez do metodo das cordas
-void metodoDasCordas(double parametroA, double parametroB, double epsilon);
+void metodoDasCordas(double pontoA, double pontoB, double epsilon);
 
-//Funcao onde se aproxima da solucao pela esquerda, variando o ponto A
+//Funcao onde se aproxima da solucao fixando B e variando A
 void fixaBVariaA(double posicaoA, double posicaoB, double desvio);
 
-//Funcao onde se aproxima da solucao pela direita, variando o ponto B
+//Funcao onde se aproxima da solucao fixando A e variando B
 void fixaAVariaB(double posicaoA, double posicaoB, double desvio);
 
 //Funcao para o calculo atravez do metodo do ponto fixo
-void metodoDoPontoFixo(double pontoB, double pontoDoInterv, double epsilon);
+void metodoDoPontoFixo(double pontoDoInterv, double epsilon);
 
 //Funcao para o calculo atravez do metodo de Newton Raphson
-void metodoDeNewtonRaphson(double pontoB, double pontoDoInterv, double epsilon);
+void metodoDeNewtonRaphson(double pontoDoInterv, double epsilon);
 
 //Armazena mensagens para impressao
 int messagens(int resposta);
@@ -39,27 +36,20 @@ int main(void){
     double pontoA = 0;              //Primeiro ponto do intervalo
     double pontoB = 0;              //Segundo ponto do intervalo
     double pontoInterv = 0;         //Ponto contido no intervalo
-    double erro = 0;                //Erro maximo
-    double funcaoDeA = 0;           //f(a)
-    double funcaoDeB = 0;           //f(b)
+    double tolerancia = 0;          //Tolerancia maximo
     
-
     /*Equanto o produto entre f(a) e f(b) for maior ou igual a 0
     , repete o loop ate se digitar um intervalo valido*/
-    while(funcaoDeA * funcaoDeB >= 0){
+    while(funcaoPrincipal(pontoA) * funcaoPrincipal(pontoB) >= 0){
 
         system("cls");
 
         messagens(1); //Chamada funcao da menssagem 1
         scanf("%lf%lf", &pontoA, &pontoB);  //Scanei os pontos do usuario
 
-        //Define funcao no ponto "a" e no ponto "b"
-        funcaoDeA = (1 + pontoA + (exp(pontoA)));
-        funcaoDeB = (1 + pontoB + (exp(pontoB)));
-
         /*Se o produto entre f(a) e f(b) eh menor que 0, logo o intervalo 
         eh valido*/
-        if((funcaoDeA * funcaoDeB < 0)){
+        if((funcaoPrincipal(pontoA) * funcaoPrincipal(pontoB) < 0)){
             
             /*Garante que o ponto esta fora do intervalo para poder entrar
             na condiçao while*/
@@ -75,25 +65,26 @@ int main(void){
                 if((pontoInterv <= pontoB) && (pontoInterv >= pontoA)){
                     
                     //Enquanto o erro não for entre 0 e 1
-                    while((erro <= 0) || (erro >= 1)){
+                    while((tolerancia <= 0) || (tolerancia >= 1)){
                         
                         messagens(9);
-                        scanf("%lf", &erro); //Scanei um pontos do usuario
+                        scanf("%lf", &tolerancia); //Scanei um pontos do usuario
                         
                         //Se o erro estiver entre 0 e 1
-                        if((erro > 0) && (erro < 1)){
+                        if((tolerancia > 0) && (tolerancia < 1)){
 
                             //Chamada de funcao dos metodos
-                            //metodoBissecao(pontoA, pontoB, erro);
-                            //metodoDasCordas(pontoA, pontoB, erro);
-                            metodoDoPontoFixo(pontoB, pontoInterv, erro);
-                            metodoDeNewtonRaphson(pontoB, pontoInterv, erro);
+                            //metodoBissecao(pontoA, pontoB, tolerancia);
+                            metodoDasCordas(pontoA, pontoB, tolerancia);
+                            //metodoDoPontoFixo(pontoInterv, tolerancia);
+                            //metodoDeNewtonRaphson(pontoInterv, tolerancia);
                         
                         }else{
 
                             system("cls");
                             messagens(14); //Chamada funcao da menssagem 14
                             system("pause");
+                            system("cls");
 
                         }
                     
@@ -104,6 +95,7 @@ int main(void){
                     system("cls");
                     messagens(8); //Chamada funcao da menssagem 8
                     system("pause");
+                    system("cls");
 
                 }
             
@@ -114,6 +106,7 @@ int main(void){
             system("cls");
             messagens(2); //Chamada funcao da menssagem 2
             system("pause");
+            system("cls");
 
         }
 
@@ -125,74 +118,61 @@ int main(void){
 
 double funcaoPrincipal(double Xn){
 
-    return ((atan(Xn)) - (1/exp(Xn)));
+    return ((pow(Xn, 5)) - (8 * Xn) + 3);
 
 }
 double funcaoDerivada(double Xn){
 
-    return ((1/(1 + (Xn * Xn))) + (1/exp(Xn)));
+    return ((exp(Xn))-1);
 
 }
 double funcao2Derivada(double Xn){
 
-    return ((-2 * Xn)/((1+Xn*Xn)*(1+Xn*Xn))) - (1/exp(Xn));
+    return ((20 * Xn));
 
 }
 double funcaoInteracao(double Xn){
 
-    return tan((1/(exp(Xn))));
+    return (sqrt((Xn + 2)));
 
 }
 
+void metodoBissecao(double pontoA, double pontoB, double epsilon){
 
-void metodoBissecao(double parametroA, double parametroB, double epsilon){
-
-    int resultado = 0;           //Controla o loop principal da funcao
     double pontoMedio;           //Armazena o ponto medio
-    double funcaoDeA;            //f(a)
-    double funcaoDeB;            //f(b)
-    double funcaoDeM;            //Funcao do ponto medio f(m)
+    double delta;                //Armazena o erro calculado |b - a|
     int L = 0;                   //Conta interacoes
 
+    delta = epsilon;             //Garante que entre no loop
     system("cls");               //Limpa a tela
     messagens(3);                //Chama funcao da menssagem 4
     messagens(4);
-
-    //Enquanto resultado for diferente de 1, repete o loop
-    while(resultado != 1){
+    
+    //Enquanto o delta for maior ou igual a tolerancia...
+    while((delta >= epsilon)){
         
-        pontoMedio = (parametroA + parametroB)/2; //Calcula o ponto medio
+        pontoMedio = (pontoA + pontoB)/2; //Calcula o ponto medio
+        delta = fabs(pontoB - pontoA);    //Calcula o |b - a|
 
-        //Define o valor do resultado a parrtir do return da funcao verificaPontoMedioEDelta
-        resultado = verificaPontoMedioEDelta(parametroA, parametroB, pontoMedio, epsilon);
+        printf("\n| %2d | %13.9lf | %13.9lf | %13.9lf | %13.9lf | %13.9lf | %13.9lf | %13.9lf |", 
+        L, pontoA, pontoB, pontoMedio, funcaoPrincipal(pontoA), funcaoPrincipal(pontoB), funcaoPrincipal(pontoMedio), delta);
+        printf("\n----------------------------------------------------------------------------------------------------------------------");
 
-        funcaoDeA = ((atan(parametroA)) - (1/exp(parametroA)));  //Calcula o f(a)
-        funcaoDeB = ((atan(parametroB)) - (1/exp(parametroB)));  //Calcula o f(b)   
-        funcaoDeM = ((atan(pontoMedio)) - (1/exp(pontoMedio)));  //Calcula o f(m)
+        //Se (f(a) * f(m)) > 0 entao o novo pontoA eh definido como o pontoMedio
+        if((funcaoPrincipal(pontoA) * funcaoPrincipal(pontoMedio)) > 0){
 
-        printf("\n| %2d | %13.9lf | %13.9lf | %13.9lf | %13.9lf | %13.9lf | %13.9lf |", 
-        L, parametroA, parametroB, pontoMedio, funcaoDeA, funcaoDeB, funcaoDeM);
-        printf("\n------------------------------------------------------------------------------------------------------");
+            pontoA = pontoMedio;
 
-        //Se resultado for extritamente igual a zero faça...
-        if(resultado == 0){
+        //Se (f(b) * f(m)) > 0 entao o novo pontoB eh definido como o pontoMedio
+        }else if((funcaoPrincipal(pontoB) * funcaoPrincipal(pontoMedio)) > 0){
 
-            //Se (f(a) * f(m)) > 0 entao o novo parametroA eh definido como o pontoMedio
-            if((funcaoDeA * funcaoDeM) > 0){
+            pontoB = pontoMedio;
 
-                parametroA = pontoMedio;
+        }
+        //Se delta for menor que a tolerancia
+        if((delta < epsilon)){
 
-             //Se (f(b) * f(m)) > 0 entao o novo parametroB eh definido como o pontoMedio
-            }else if((funcaoDeB * funcaoDeM) > 0){
-
-                parametroB = pontoMedio;
-
-            }
-
-
-        }else{
-
-            printf("\n\nSolucao: s = %.9lf +/- %.9lf\n", pontoMedio, epsilon);
+            printf("\n\nSolucao: s = %.9lf +/- %.9lf\n", pontoMedio, delta);
             system("pause");
 
         }
@@ -203,77 +183,44 @@ void metodoBissecao(double parametroA, double parametroB, double epsilon){
 
 }
 
-int verificaPontoMedioEDelta(double parametroA, double parametroB, double medio, double epsilon){
-
-    double funcaoDeM;           //Funcao do ponto medio f(m)
-    double delta;               //Armazena o erro calculado |b - a|
-
-    funcaoDeM = ((atan(medio)) - (1/exp(medio)));   //Calcula o f(m)
-
-    delta = fabs(parametroB - parametroA);          //Calcula o erro
-
-    if(funcaoDeM == 0)return 1;     //Se f(m) for estritamente igual a 0, a funcao retorna 1
-    if(delta < epsilon)return 1;    //Se delta calculado for menor que o erro dado, a funcao retorna 1
-
-    return 0;   //Se nao satisfazer nenhuma das duas, a funcao retorna 0
-
-}
-
-void metodoDasCordas(double parametroA, double parametroB, double epsilon){
-
-    double funcaoDeA;           //f(a)
-    double derivada2DeA;        //Segunda deivada f"(a)
-
-    funcaoDeA = ((atan(parametroA)) - (1/exp(parametroA)));     //Calcula o f(a)
-    //Calcula o f"(a)
-    derivada2DeA = ((-2 * parametroA)/((1+parametroA*parametroA)*(1+parametroA*parametroA))) - (1/exp(parametroA));
+void metodoDasCordas(double pontoA, double pontoB, double epsilon){
     
     //Se (f(a) * f"(a)) < 0, chama a fucao fixaBVariaA
-    if((funcaoDeA * derivada2DeA) < 0){
+    if((funcaoPrincipal(pontoA) * funcao2Derivada(pontoA)) < 0){
 
-        fixaBVariaA(parametroA, parametroB, epsilon);
+        fixaBVariaA(pontoA, pontoB, epsilon);
 
-     //Se (f(a) * f"(a)) > 0, chama a fucao fixaAVariaB   
-    }else if((funcaoDeA * derivada2DeA) > 0){
+     //Se (f(a) * f"(a)) > 0, chama a fucao fixaAVariaB
+    }else if(funcaoPrincipal(pontoA) * funcao2Derivada(pontoA) > 0){
 
-        fixaAVariaB(parametroA, parametroB, epsilon);
+        fixaAVariaB(pontoA, pontoB, epsilon);
 
     }
 
 }
 
-void fixaBVariaA(double posicaoA, double posicaoB, double epsilon){
+void fixaBVariaA(double pontoA, double pontoB, double epsilon){
 
     double Xn;                   //Primeiro valor a ser ultilizado
     double XnMaisUm;             //Proximo valor
     double delta;                //Armazena o erro calculado |Xn - XnMaisUm|
-    double funcaoDeXn;           //f(Xn)
-    double funcaoDeB;            //f(b)
-    double funcaoDeXnMaisUm;     //f(Xn+1)
     int L = 0;                   //Conta interacoes    
 
-    //system("cls");               //Limpa a tela
     messagens(5);                //Chama funcao da menssagem 5
     messagens(6);
 
-    //Calcula o f(b) que é fixo
-    funcaoDeB = ((atan(posicaoB)) - (1/exp(posicaoB)));
-    Xn = posicaoA;               //Define Xn como ponto A que irá variar
+    Xn = pontoA;                 //Define Xn como pontoA
     delta = epsilon + 1;         //Garante o delta maior que o erro
 
-    //Enquanto delta maior que o erro dado, repete o loop
+    //Enquanto delta maior ou igual a tolerancia, repete o loop
     while(delta >= epsilon){
 
-        funcaoDeXn = ((atan(Xn)) - (1/exp(Xn)));    //Calcula o f(Xn)
-        //Calcula o Xn+1 atravez da formula
-        XnMaisUm = Xn + ((funcaoDeXn/(funcaoDeB - funcaoDeXn)) * (Xn - posicaoB));
-        //Calcula o f(Xn+1)
-        funcaoDeXnMaisUm = ((atan(XnMaisUm)) - (1/exp(XnMaisUm)));
-        //Define o delta como |Xn - Xn+1|
-        delta = fabs(Xn - XnMaisUm);
+        //Calcula o Xn + 1
+        XnMaisUm = Xn + ((funcaoPrincipal(Xn)/(funcaoPrincipal(pontoB) - funcaoPrincipal(Xn))) * (Xn - pontoB));
+        delta = fabs(Xn - XnMaisUm);  //Define o delta como |Xn - Xn+1|
 
-        printf("\n| %2d | %13.9lf | %13.9lf | %13.9lf | %13.9lf |", 
-        L, posicaoA, XnMaisUm, funcaoDeXnMaisUm, delta);
+        printf("\n| %2d | %13.6lf | %13.6lf | %13.6lf | %13.6lf |", 
+        L, Xn, funcaoPrincipal(Xn), XnMaisUm, delta);
         printf("\n----------------------------------------------------------------------");
 
         Xn = XnMaisUm;           //Xn passa a ser Xn+1 anterior
@@ -282,47 +229,72 @@ void fixaBVariaA(double posicaoA, double posicaoB, double epsilon){
     }
 
     //Imprime a solucao com o erro dado por |Xn+1 - Xn|
-    printf("\n\nSolucao: s = %.9lf +/- %.9lf\n", XnMaisUm, epsilon);
+    printf("\n\nSolucao: s = %.6lf +/- %.6lf\n", XnMaisUm, delta);
     system("pause");
 
 }
 
-void fixaAVariaB(double posicaoA, double posicaoB, double epsilon){
+void fixaAVariaB(double pontoA, double pontoB, double epsilon){
 
     double Xn;                   //Primeiro valor a ser ultilizado
     double XnMaisUm;             //Proximo valor
     double delta;                //Armazena o erro calculado |Xn - XnMaisUm|
-    double funcaoDeA;            //f(a)
-    double funcaoDeXn;           //f(Xn)
-    double funcaoDeXnMaisUm;     //f(Xn+1)
-    int L = 0;                   //Conta interacoes
+    int L = 0;                   //Conta interacoes    
 
-    //system("cls");               //Limpa a tela
     messagens(5);                //Chama funcao da menssagem 5
     messagens(6);
 
-    //Calcula o f(a) que é fixo
-    funcaoDeA = ((atan(posicaoA)) - (1/exp(posicaoA)));
-    Xn = posicaoB;               //Define Xn como ponto B que irá variar
+    Xn = pontoB;                 //Define Xn como pontoB
     delta = epsilon + 1;         //Garante o delta maior que o erro
 
-    //Enquanto delta maior que o erro dado, repete o loop
+    //Enquanto delta maior ou igual a tolerancia, repete o loop
     while(delta >= epsilon){
 
-        funcaoDeXn = ((atan(Xn)) - (1/exp(Xn)));   //Calcula o f(Xn)
-        //Calcula o Xn+1 atravez da formula
-        XnMaisUm = Xn + ((funcaoDeXn/(funcaoDeA - funcaoDeXn)) * (Xn - posicaoA));
-        //Calcula o f(Xn+1)
-        funcaoDeXnMaisUm = ((atan(XnMaisUm)) - (1/exp(XnMaisUm)));
-        //Define o delta como |Xn - Xn+1|
-        delta = fabs(Xn - XnMaisUm);
+        //Calcula o Xn + 1
+        XnMaisUm = Xn + ((funcaoPrincipal(Xn)/(funcaoPrincipal(pontoA) - funcaoPrincipal(Xn))) * (Xn - pontoA));
+        delta = fabs(Xn - XnMaisUm);  //Define o delta como |Xn - Xn+1|
 
-        printf("\n| %2d | %13.9lf | %13.9lf | %13.9lf | %13.9lf |", 
-        L, Xn, XnMaisUm, funcaoDeXnMaisUm, delta);
+        printf("\n| %2d | %13.6lf | %13.6lf | %13.6lf | %13.6lf |", 
+        L, Xn, funcaoPrincipal(Xn), XnMaisUm, delta);
         printf("\n----------------------------------------------------------------------");
 
         Xn = XnMaisUm;           //Xn passa a ser Xn+1 anterior
         L++;                     //Incrementa +1
+
+    }
+
+    //Imprime a solucao com o erro dado por |Xn+1 - Xn|
+    printf("\n\nSolucao: s = %.6lf +/- %.6lf\n", XnMaisUm, delta);
+    system("pause");
+
+}
+
+void metodoDoPontoFixo(double pontoDoInterv, double epsilon){
+
+    double Xn;                   //Primeiro valor a ser ultilizado
+    double XnMaisUm;             //Proximo valor
+    double delta;                //Armazena o erro calculado |Xn - XnMaisUm|
+    int L = 0;                   //Conta interacoes
+
+    delta = epsilon;        //Define delta igual o epsilon para entrar no loop
+    Xn = pontoDoInterv;     //define Xn como o ponto digitado do intervalo
+    messagens(10);
+    messagens(11);
+
+    //Enquanto o delta for maior ou igual a tolerancia, repete o loop
+    while(delta >= epsilon){
+        
+        //Nao define a Xn igual XnMaisUm na primera rodada
+        if(L != 0 )Xn = XnMaisUm;
+
+        XnMaisUm = funcaoInteracao(Xn);  //Define o XnMaisUm igual ao g(Xn)
+        delta = fabs(XnMaisUm - Xn);     //Define delta como |Xn - XnMaisUm|
+
+        printf("\n| %2d | %13.9lf | %13.9lf | %13.9lf | %13.9lf |",
+        L, Xn, funcaoPrincipal(Xn), XnMaisUm, delta);
+        printf("\n----------------------------------------------------------------------");
+
+        L++; //Incrementa +1 sempre que rodar o loop
 
     }
 
@@ -332,72 +304,29 @@ void fixaAVariaB(double posicaoA, double posicaoB, double epsilon){
 
 }
 
-void metodoDoPontoFixo(double pontoB, double pontoDoInterv, double epsilon){
+void metodoDeNewtonRaphson(double pontoDoInterv, double epsilon){
 
-    double Xn;              //Primeiro valor a ser ultilizado
-    double XnMaisUm;        //Proximo valor
-    double funcaoDeX;       //Funcao principal
-    double funcaoGdeX;      //Funcao g(x)
-    int L = 0;              //Conta interacoes
+    double Xn;                   //Primeiro valor a ser ultilizado
+    double XnMaisUm;             //Proximo valor
+    double delta;                //Armazena o erro calculado |Xn - XnMaisUm|
+    int L = 0;                   //Conta interacoes
 
-    XnMaisUm = pontoB + 1;  //garante que Xn+1 - Xn sera maior que epsilon
-    Xn = pontoDoInterv;     //define Xn como o ponto digitado do intervalo
-    messagens(10);
-    messagens(11);
-
-    //Enquanto o |Xn+1 - Xn| for maior ou igual ao erro, repete o loop
-    while(((fabs(XnMaisUm - Xn)) >= epsilon)){
-        
-        //Nao define a Xn igual XnMaisUm na primera rodada
-        if(L != 0 )Xn = XnMaisUm;
-
-        //Calcula g(Xn) sempre com o anterior a Xn+1
-        funcaoGdeX = (-1 -((exp(Xn))));
-        //Calcula f(Xn) sempre com o anterior a Xn+1
-        funcaoDeX = (1 + Xn + (exp(Xn)));
-        XnMaisUm = funcaoGdeX;  //Define o XnMaisUm igual ao g(Xn)
-        
-        printf("\n| %2d | %13.9lf | %13.9lf | %13.9lf | %13.9lf |", 
-        L, Xn, funcaoDeX, XnMaisUm, (fabs(XnMaisUm - Xn)));
-        printf("\n----------------------------------------------------------------------");
-
-        L++; //Incrementa +1 sempre que rodar o loop
-
-    }
-
-    //Imprime a solucao com o erro dado por |Xn+1 - Xn|
-    printf("\n\nSolucao: s = %.9lf +/- %.9lf\n", XnMaisUm, (fabs(XnMaisUm - Xn)));
-    system("pause");
-
-}
-
-void metodoDeNewtonRaphson(double pontoB, double pontoDoInterv, double epsilon){
-
-    double Xn;              //Primeiro valor a ser ultilizado
-    double XnMaisUm;        //Proximo valor
-    double funcaoDeX;       //Funcao principal
-    double derivadaDeX;     //Derivada da Funcao, f'(x)
-    int L = 0;              //Conta interacoes
-
-    XnMaisUm = pontoB + 1;  //define Xn+1 fora do intervalo, garante que entre no loop
+    delta = epsilon;        //Define delta igual o epsilon para entrar no loop
     Xn = pontoDoInterv;     //define Xn como o ponto digitado do intervalo
     messagens(12);
     messagens(13);
 
-    //Enquanto o |Xn+1 - Xn| for maior ou igual ao erro, repete o loop
-    while(((fabs((XnMaisUm - Xn))) >= epsilon)){
+    //Enquanto o delta for maior ou igual a tolerancia, repete o loop
+    while(delta >= epsilon){
         
         //Nao define a Xn igual XnMaisUm na primera rodada
         if(L != 0 )Xn = XnMaisUm;
 
-        //Calcula f(Xn) sempre com o anterior a Xn+1
-        funcaoDeX = (1 + Xn + (exp(Xn)));
-        //Calcula f'(Xn) sempre com o anterior a Xn+1
-        derivadaDeX = (1 + (exp(Xn)));
-        XnMaisUm = (Xn - (funcaoDeX/derivadaDeX));  //Define o XnMaisUm igual ao g(Xn)
-        
-        printf("\n| %2d | %13.9lf | %13.9lf | %13.9lf | %13.9lf | %13.9lf |", 
-        L, Xn, funcaoDeX, derivadaDeX, XnMaisUm, (fabs((XnMaisUm - Xn))));
+        XnMaisUm = (Xn - (funcaoPrincipal(Xn)/funcaoDerivada(Xn)));  //Define o XnMaisUm igual ao g(Xn)
+        delta = fabs(XnMaisUm - Xn);                                 //Define delta como |Xn - XnMaisUm|
+
+        printf("\n| %2d | %13.6lf | %13.6lf | %13.6lf | %13.6lf | %13.6lf |", 
+        L, Xn, funcaoPrincipal(Xn), funcaoDerivada(Xn), XnMaisUm, delta);
         printf("\n--------------------------------------------------------------------------------------");
 
         L++; //Incrementa +1 sempre que rodar o loop
@@ -405,7 +334,7 @@ void metodoDeNewtonRaphson(double pontoB, double pontoDoInterv, double epsilon){
     }
 
     //Imprime a solucao com o erro dado por |Xn+1 - Xn|
-    printf("\n\nSolucao: s = %.9lf +/- %.9lf\n", XnMaisUm, (fabs((XnMaisUm - Xn))));
+    printf("\n\nSolucao: s = %.6lf +/- %.6lf\n", XnMaisUm, delta);
     system("pause");
 
 }
@@ -422,19 +351,19 @@ int messagens(int resposta){
         case 2: printf("\n\nIntervalo invalido digitado\n");
             break;
         
-        case 3: printf("\n\n\t\t\t\t\tMETODO BISSECAO\n");
+        case 3: printf("\n\n\t\t\t\t\t          METODO BISSECAO\n");
             break;
 
-        case 4: printf("\n  %2s   %13s   %13s   %13s   %13s   %13s   %13s  ", "n", 
-                "a", "b", "m", "f(a)", "f(b)", "f(m)");
-            printf("\n------------------------------------------------------------------------------------------------------");
+        case 4: printf("\n  %2s   %13s   %13s   %13s   %13s   %13s   %13s  %13s", "n", 
+                "a", "b", "m", "f(a)", "f(b)", "f(m)", "|b - a|");
+            printf("\n----------------------------------------------------------------------------------------------------------------------");
             break;
 
         case 5: printf("\n\n\t\t\tMETODO DAS CORDAS\n");
             break;
 
         case 6: printf("\n  %2s   %13s   %13s   %13s   %13s  ", "n", 
-                "Xn", "Xn+1", "f(Xn+1)", "delta");
+                "Xn", "f(Xn)", "Xn+1", "|Xn+1 - Xn|");
             printf("\n----------------------------------------------------------------------");
             break;
 
@@ -444,7 +373,7 @@ int messagens(int resposta){
         case 8: printf("\n\nPonto fora do intervalo digitado\n");
             break;
 
-        case 9: printf("\n\nDigite o erro aceitavel: ");
+        case 9: printf("\n\nDigite uma tolerancia aceitavel: ");
             break;
 
         case 10: printf("\n\n\t\t\tMETODO DO PONTO FIXO\n");
