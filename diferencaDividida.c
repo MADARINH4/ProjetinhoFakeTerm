@@ -38,7 +38,7 @@ void defineXeF(int n, double tabela[][n]){
             system("cls");
             printf("\n\n Digite os valores de x!\n");
             for(int linha = 0; linha < n-2; linha++)scanf("%lf", &tabela[linha][coluna]);
-
+            
         }else{
 
             system("cls");
