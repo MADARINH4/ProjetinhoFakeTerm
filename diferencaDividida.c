@@ -6,7 +6,6 @@ void defineXeF(int n, double tabela[][n]);
 void calculaDiferencaDivida(int n, double tabela[][n]);
 void imprimeTabela(int n, double tabela[][n]);
 
-
 int main(void){
 
     int n = 0;              //Numero de valores conhecidos de x
@@ -24,6 +23,7 @@ int main(void){
     calculaDiferencaDivida(n, tabela);
     system("cls");
     imprimeTabela(n, tabela);
+    system("pause");
 
     return 0;
 
@@ -37,21 +37,14 @@ void defineXeF(int n, double tabela[][n]){
 
             system("cls");
             printf("\n\n Digite os valores de x!\n");
-            for(int linha = 0; linha < n-2; linha++){
-                
-                scanf("%lf", &tabela[linha][coluna]);
-
-            }
+            for(int linha = 0; linha < n-2; linha++)scanf("%lf", &tabela[linha][coluna]);
 
         }else{
 
             system("cls");
             printf("\n\n Digite os valores de f(x)!\n");
-            for(int linha = 0; linha < n-2; linha++){
-                
-                scanf("%lf", &tabela[linha][coluna]);
+            for(int linha = 0; linha < n-2; linha++)scanf("%lf", &tabela[linha][coluna]);
 
-            }
 
         }
 
@@ -76,33 +69,32 @@ void calculaDiferencaDivida(int n, double tabela[][n]){
 void imprimeTabela(int n, double tabela[][n]){
 
     int linha;
-    int coluna;
+    int coluna = 0;
 
     for(linha = 0; linha < (n - 2); linha++){
 
         printf("\n");
 
-        if(linha != (n - 2)){
+        if(linha == 0){
+
+            while(coluna < n - 1){
+
+                if(coluna == 0)printf(" %14s|", "X");
+                if(coluna == 1)printf(" %14s|", "F(x)");
+                if(coluna > 1)printf("%14s%d|", "DeltaF", coluna - 1);
+                coluna++;
+
+            }
             
-            for(coluna = 0; coluna < (n - (linha + 1)); coluna++){
-
-                printf(" %13.10lf\t", tabela[linha][coluna]);
-
-            }
-
-        }else{
-
-            for(coluna = 0; coluna < (n - (linha)); coluna++){
-
-                printf(" %13.10f\t", tabela[linha][coluna]);
-
-            }
+            printf("\n");
 
         }
+
+        if(linha != (n - 2))for(coluna = 0; coluna < (n - (linha + 1)); coluna++)printf(" %14.10lf|", tabela[linha][coluna]);
+        else for(coluna = 0; coluna < (n - (linha)); coluna++)printf(" %14.10f|", tabela[linha][coluna]);
 
     }
 
     printf("\n\n");
-    system("pause");
 
 }
