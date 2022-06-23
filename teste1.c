@@ -4,37 +4,40 @@
 
 double funcaoDaIntegral(double X);
 double funcao2derivada(double X);
-void preencheTabela(int n, double tabela[][n], double pontoA, double h);
-void imprimeTabela(int n, double tabela[][n]);
-void regraDosTrapezios(int n, double tabela[][n], double pontoA, double h);
-void regraDeSimpson(int n, double tabela[][n], double pontoA, double pontoB, double h);
+void preencheTabela(int slot, double tabela[][slot], double pontoA, double h);
+void imprimeTabela(int slot, double tabela[][slot]);
+void regraDosTrapezios(int slot, double tabela[][slot], double h);
+void regraDeSimpson(int slot, double tabela[][slot], double pontoA, double pontoB, double h);
 
 int main(void){
 
     double pontoA = 0;
     double pontoB = 0;
+    double n = 0;
     double h = 0;
-    int n = 0;
+    int slot = 0;
 
     system("cls");
     printf("\n\nPontos do intervalo. Ex: 1 2. Digite: ");
     scanf("%lf%lf", &pontoA, &pontoB);
     system("cls");
     printf("\n\nQuantas particoes no intervalo: ");
-    scanf("%d", &n);
+    scanf("%lf", &n);
     system("cls");
+
+    slot = n;
     
-    h = (pontoB - pontoA)/n;
+    h = (pontoB - pontoA)/slot;
 
-    double tabela[n][n];
+    double tabela[slot][slot];
 
-    preencheTabela(n, tabela, pontoA, h);
-    imprimeTabela(n, tabela);
-    regraDosTrapezios(n, tabela, pontoA, h);
+    preencheTabela(slot, tabela, pontoA, h);
+    imprimeTabela(slot, tabela);
+    regraDosTrapezios(slot, tabela, h);
 
-    if(n % 2 == 0){
+    if(slot % 2 == 0){
 
-        regraDeSimpson(n, tabela, pontoA, pontoB, h);
+        regraDeSimpson(slot, tabela, pontoA, pontoB, h);
 
     }else{
 
@@ -59,7 +62,7 @@ double funcao2derivada(double X){
 
 }
 
-void preencheTabela(int n, double tabela[][n], double pontoA, double h){
+void preencheTabela(int slot, double tabela[][slot], double pontoA, double h){
 
     int coluna;
     int linha;
@@ -67,7 +70,7 @@ void preencheTabela(int n, double tabela[][n], double pontoA, double h){
 
     for(coluna = 0; coluna < 3; coluna++){
 
-        for(linha = 0; linha <= n; linha++){
+        for(linha = 0; linha <= slot; linha++){
 
             if(coluna == 0)tabela[linha][coluna] = linha;
             if(coluna == 1){
@@ -89,38 +92,38 @@ void preencheTabela(int n, double tabela[][n], double pontoA, double h){
 
 }
 
-void imprimeTabela(int n, double tabela[][n]){
+void imprimeTabela(int slot, double tabela[][slot]){
 
     printf("\n\t\t\tTABELA\n");
     printf("\n  %14s  %14s  %14s  ", "n|", 
     "Xn|", "f(Xn)|");
 
-    for(int linha = 0; linha <= n; linha++){
+    for(int linha = 0; linha <= slot; linha++){
         printf("\n");
         for(int coluna = 0; coluna < 3; coluna++)printf(" %14.10lf|", tabela[linha][coluna]);
     }
 
 }
 
-void regraDosTrapezios(int n, double tabela[][n], double pontoA, double h){
+void regraDosTrapezios(int slot, double tabela[][slot], double h){
 
     double resultado = 0;
     int contador = 0;
     int coluna = 0;
     int linha = 0;
 
-    while(contador != n){
+    while(contador != slot){
 
         resultado = (((h/2)*((tabela[contador][2]) + (tabela[contador + 1][2]))) + resultado);
         contador++;
 
     }
 
-    printf("\n\nAproximacao Regra do Trapezio s = %.9lf +/- %.9lf\n\n", resultado, fabs(((pow(h, 3))/12) * funcao2derivada(pontoA)));
+    printf("\n\nAproximacao Regra do Trapezio s = %.9lf\n", resultado);
 
 }
 
-void regraDeSimpson(int n, double tabela[][n], double pontoA, double pontoB, double h){
+void regraDeSimpson(int slot, double tabela[][slot], double pontoA, double pontoB, double h){
 
     double resultado = 0;
     double resultado1 = 0;
@@ -130,7 +133,7 @@ void regraDeSimpson(int n, double tabela[][n], double pontoA, double pontoB, dou
     int coluna = 0;
     int linha = 0;
 
-    while(contador != n){
+    while(contador != slot){
 
         resultado = ((h/3)*((tabela[contador][2]) + (4*(tabela[contador1][2])) + (tabela[contador + 2][2]))) + resultado;
         contador1 = contador1 + 2;
@@ -138,13 +141,13 @@ void regraDeSimpson(int n, double tabela[][n], double pontoA, double pontoB, dou
 
     }
 
-    if(n % 4 == 0){
+    if(slot % 4 == 0){
 
         contador = 0;
         contador1 = 2;
-        h = (pontoB - pontoA)/(n/2);
+        h = (pontoB - pontoA)/(slot/2);
 
-        while(contador != n){
+        while(contador != slot){
 
             resultado1 = ((h/3)*((tabela[contador][2]) + (4*(tabela[contador1][2])) + (tabela[contador + 4][2]))) + resultado1;
             contador1 = contador1 + 4;
