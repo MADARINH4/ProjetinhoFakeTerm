@@ -4,40 +4,31 @@
 
 double funcaoDaIntegral(double X);
 double funcao2derivada(double X);
-void preencheTabela(int slot, double tabela[][slot], double pontoA, double h);
-void imprimeTabela(int slot, double tabela[][slot]);
-void regraDosTrapezios(int slot, double tabela[][slot], double h);
-void regraDeSimpson(int slot, double tabela[][slot], double pontoA, double pontoB, double h);
+double calculaImprime(int contador, int contador1, int n, int nCopia, double pontoA, double pontoB, int Cn);
+void regraDosTrapezios(int n, double pontoA, double pontoB);
+void regraDeSimpson(int n, double pontoA, double pontoB);
 
 int main(void){
 
     double pontoA = 0;
     double pontoB = 0;
-    double n = 0;
     double h = 0;
-    int slot = 0;
+    int n = 0;
 
     system("cls");
     printf("\n\nPontos do intervalo. Ex: 1 2. Digite: ");
     scanf("%lf%lf", &pontoA, &pontoB);
     system("cls");
     printf("\n\nQuantas particoes no intervalo: ");
-    scanf("%lf", &n);
+    scanf("%d", &n);
     system("cls");
-
-    slot = n;
     
-    h = (pontoB - pontoA)/slot;
+    regraDosTrapezios(n, pontoA, pontoB);
+    system("pause");
 
-    double tabela[slot][slot];
+    if(n % 2 == 0){
 
-    preencheTabela(slot, tabela, pontoA, h);
-    imprimeTabela(slot, tabela);
-    regraDosTrapezios(slot, tabela, h);
-
-    if(slot % 2 == 0){
-
-        regraDeSimpson(slot, tabela, pontoA, pontoB, h);
+        regraDeSimpson(n, pontoA, pontoB);
 
     }else{
 
@@ -52,117 +43,176 @@ int main(void){
 
 double funcaoDaIntegral(double X){
 
-    return ((4*pow(X, 5)) - 1)/((pow(X, 10)) + 2*(pow(X, 6)) + 2*(pow(X, 5)) + (pow(X, 2)) + (2*X) + 1);
+    return sqrt(1 + (pow(X, 3)));
 
 }
 
 double funcao2derivada(double X){
 
-    return (6*((20*pow(X, 13)) - (40*pow(X, 9)) - (85*pow(X, 8)) + (4*pow(X, 5)) + (10*pow(X, 4)) + (20*pow(X, 3)) - 1))/ pow((pow(X, 5) + X + 1), 4);
+    return (3*((4*X) + (pow(X,4))))/((4*(1 + (pow(X, 3))))*(sqrt(1 + (pow(X, 3)))));
 
 }
 
-void preencheTabela(int slot, double tabela[][slot], double pontoA, double h){
+void regraDosTrapezios(int n, double pontoA, double pontoB){
 
-    int coluna;
-    int linha;
+    double resultado = 0;
+    double h = 0;
     double Xn = 0;
+    int Cn = 1;
+    int contador = 0;
 
-    for(coluna = 0; coluna < 3; coluna++){
+    h = (pontoB - pontoA)/(n);
 
-        for(linha = 0; linha <= slot; linha++){
+    printf("\n\n\t     REGRA DO TRAPEZIO\n");
+    printf("\n  %2s   %13s   %13s   %2s  ", "n", 
+    "Xn", "f(Xn)", "Cn");
+    printf("\n-------------------------------------------");
 
-            if(coluna == 0)tabela[linha][coluna] = linha;
-            if(coluna == 1){
+    while(contador <= n){
 
-                Xn = (pontoA + (linha*h));
-                tabela[linha][coluna] = (pontoA + (linha*h));
+        if(contador == 0){
 
-            }
-            if(coluna == 2){
+            resultado = calculaImprime(contador, 0, n, n, pontoA, pontoB, Cn) +  resultado;
+            contador++;
 
-                Xn = (pontoA + (linha*h));
-                tabela[linha][coluna] = funcaoDaIntegral(Xn);
+        }
+        if((contador > 0) && (contador < n)){
 
-            }
+            Cn = 2;
+            resultado = calculaImprime(contador, 0, n, n, pontoA, pontoB, Cn) +  resultado;
+            contador++;
+
+        }
+        if(contador == n){
             
+            Cn = 1;
+            resultado = calculaImprime(contador, 0, n, n, pontoA, pontoB, Cn) +  resultado;
+            contador++; 
+
         }
 
     }
 
-}
-
-void imprimeTabela(int slot, double tabela[][slot]){
-
-    printf("\n\t\t\tTABELA\n");
-    printf("\n  %14s  %14s  %14s  ", "n|", 
-    "Xn|", "f(Xn)|");
-
-    for(int linha = 0; linha <= slot; linha++){
-        printf("\n");
-        for(int coluna = 0; coluna < 3; coluna++)printf(" %14.10lf|", tabela[linha][coluna]);
-    }
+    printf("\n\nAproximacao Regra do Trapezio s = %.9lf +/- %.9lf\n\n\n", ((h/2)*resultado), fabs(((pow(h, 3))/12) * funcao2derivada(pontoB)));
 
 }
 
-void regraDosTrapezios(int slot, double tabela[][slot], double h){
-
-    double resultado = 0;
-    int contador = 0;
-    int coluna = 0;
-    int linha = 0;
-
-    while(contador != slot){
-
-        resultado = (((h/2)*((tabela[contador][2]) + (tabela[contador + 1][2]))) + resultado);
-        contador++;
-
-    }
-
-    printf("\n\nAproximacao Regra do Trapezio s = %.9lf\n", resultado);
-
-}
-
-void regraDeSimpson(int slot, double tabela[][slot], double pontoA, double pontoB, double h){
+void regraDeSimpson(int n, double pontoA, double pontoB){
 
     double resultado = 0;
     double resultado1 = 0;
-    double In = 0;
-    int contador1 = 1;
+    double Xn = 0;
+    double h = 0;
+    int Cn = 1;
+    int nCopia = 0;
+    int contador1 = 0;
     int contador = 0;
-    int coluna = 0;
-    int linha = 0;
 
-    while(contador != slot){
+    h = (pontoB - pontoA)/(n);
 
-        resultado = ((h/3)*((tabela[contador][2]) + (4*(tabela[contador1][2])) + (tabela[contador + 2][2]))) + resultado;
-        contador1 = contador1 + 2;
-        contador = contador + 2;
+    printf("\n\n\t     REGRA DE SIIMPSON\n");
+    printf("\n  %2s   %13s   %13s   %2s  ", "n", 
+    "Xn", "f(Xn)", "Cn");
+    printf("\n-------------------------------------------");
 
-    }
+    while(contador <= n){
 
-    if(slot % 4 == 0){
+        nCopia = n;
 
-        contador = 0;
-        contador1 = 2;
-        h = (pontoB - pontoA)/(slot/2);
+        if(contador == 0){
 
-        while(contador != slot){
+            resultado = calculaImprime(contador, contador1, n, nCopia, pontoA, pontoB, Cn) + resultado;
+            nCopia = n/2;
+            resultado1 = calculaImprime(contador, contador1, n, nCopia, pontoA, pontoB, Cn) + resultado1;
+            nCopia = n;
+            contador++;
+            contador1++;
 
-            resultado1 = ((h/3)*((tabela[contador][2]) + (4*(tabela[contador1][2])) + (tabela[contador + 4][2]))) + resultado1;
-            contador1 = contador1 + 4;
-            contador = contador + 4;
+        }
+        if((contador > 0) && (contador < n) && ((contador % 2) == 0)){
+
+            Cn = 2;
+            resultado = calculaImprime(contador, contador1, n, nCopia, pontoA, pontoB, Cn) + resultado;
+            contador++;
+
+            if(n % 4 == 0){
+                
+                nCopia = n/2;
+
+                if((contador1 % 2) != 0){
+
+                    Cn = 4;
+                    resultado1 = calculaImprime(contador, contador1, n, nCopia, pontoA, pontoB, Cn) + resultado1;
+                    contador1++;
+
+                }else{
+
+                    Cn = 2;
+                    resultado1 = calculaImprime(contador, contador1, n, nCopia, pontoA, pontoB, Cn) + resultado1;
+                    contador1++;
+
+                }
+
+                nCopia = n;
+
+            }
+
+        }
+        if((contador > 0) && (contador < n) && ((contador % 2) != 0)){
+
+            Cn = 4;
+            resultado = calculaImprime(contador, contador1, n, nCopia, pontoA, pontoB, Cn) + resultado;
+            contador++;
+
+        }
+        if(contador == n){
+
+            Cn = 1;
+            resultado = calculaImprime(contador, contador1, n, nCopia, pontoA, pontoB, Cn) + resultado;
+            nCopia = n/2;
+            resultado1 = calculaImprime(contador, contador1, n, nCopia, pontoA, pontoB, Cn) + resultado1;
+            nCopia = n;
+            contador++;
+            contador1++;
 
         }
 
-        printf("\nAproximacao Regra de Simpson s = %.9lf +/- %.9lf\n\n", resultado, (fabs(resultado - resultado1)/15));
+    }
+
+    if(n % 4 == 0){
+
+        printf("\nAproximacao Regra de Simpson s = %.9lf +/- %.9lf\n\n", (h/3)*resultado, fabs((((h/3)*resultado) - (resultado1))/15));
 
     }else{
 
-        printf("\nAproximacao Regra de Simpson s = %.9lf\n\n", resultado);
+        printf("\nAproximacao Regra de Simpson s = %.9lf\n\n", (h/3)*resultado);
 
     }
 
     system("pause");
     
+}
+
+double calculaImprime(int contador, int contador1, int n, int nCopia, double pontoA, double pontoB, int Cn){
+
+    double h = 0;
+    double Xn = 0;
+
+    if(nCopia == n){
+            
+        h = (pontoB - pontoA)/(n);
+        Xn = (pontoA + (contador*h));
+        printf("\n| %2d | %13.9lf | %13.9lf | %2d |",
+        contador, Xn, funcaoDaIntegral(Xn), Cn);
+        printf("\n-------------------------------------------");
+        return funcaoDaIntegral(Xn)*Cn;
+
+    }else{
+
+        h = (pontoB - pontoA)/(nCopia); 
+        Xn = (pontoA + (contador1*h));
+        return (h/3)*funcaoDaIntegral(Xn)*Cn;
+
+    }
+
 }
