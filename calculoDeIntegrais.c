@@ -4,6 +4,7 @@
 
 double funcaoDaIntegral(double X);
 double funcao2derivada(double X);
+double funcao4derivada(double X);
 double calculaImprime(int contador, int contador1, int n, int nCopia, double pontoA, double pontoB, int Cn);
 void regraDosTrapezios(int n, double pontoA, double pontoB);
 void regraDeSimpson(int n, double pontoA, double pontoB);
@@ -12,7 +13,6 @@ int main(void){
 
     double pontoA = 0;
     double pontoB = 0;
-    double h = 0;
     int n = 0;
 
     system("cls");
@@ -53,8 +53,15 @@ double funcao2derivada(double X){
 
 }
 
+double funcao4derivada(double X){
+
+    return (120*((56*pow(X, 21))-(456*pow(X, 17))-(951*pow(X, 16))+(456*pow(X, 13))+(1582*pow(X, 12))+(1686*pow(X, 11))-(56*pow(X, 9))-(288*pow(X, 8))-(468*pow(X, 7))-(426*pow(X, 6))-(6*pow(X, 4))+(6*pow(X, 3))-(6*pow(X, 2))+(6*X) - 1))/((pow(X, 5)+X+1)*(pow(X, 5)+X+1)*(pow(X, 5)+X+1)*(pow(X, 5)+X+1)*(pow(X, 5)+X+1)*(pow(X, 5)+X+1));
+
+}
+
 void regraDosTrapezios(int n, double pontoA, double pontoB){
 
+    double valorExato = 0.27619;
     double resultado = 0;
     double h = 0;
     double Xn = 0;
@@ -93,12 +100,14 @@ void regraDosTrapezios(int n, double pontoA, double pontoB){
 
     }
 
-    printf("\n\nAproximacao Regra do Trapezio s = %.9lf +/- %.9lf\n\n\n", ((h/2)*resultado), fabs(((pow(h, 3))/12) * funcao2derivada(pontoB)));
-
+    printf("\n\nAproximacao Regra do Trapezio s = %.9lf", ((h/2)*resultado));
+    printf("\nErro absoluto Eabs = %.9lf", fabs(valorExato - ((h/2)*resultado)));
+    printf("\nErro do metodo Em = %.9lf\n\n\n", fabs(((pow(h, 3))/12) * funcao2derivada(pontoB)));
 }
 
 void regraDeSimpson(int n, double pontoA, double pontoB){
 
+    double valorExato = 0.27619;
     double resultado = 0;
     double resultado1 = 0;
     double Xn = 0;
@@ -181,11 +190,16 @@ void regraDeSimpson(int n, double pontoA, double pontoB){
 
     if(n % 4 == 0){
 
-        printf("\nAproximacao Regra de Simpson s = %.9lf +/- %.9lf\n\n", (h/3)*resultado, fabs((((h/3)*resultado) - (resultado1))/15));
+        printf("\nAproximacao Regra de Simpson s = %.9lf", (h/3)*resultado);
+        printf("\nErro absoluto Eabs = %.9lf", fabs(valorExato - ((h/3)*resultado)));
+        printf("\nErro do metodo Em = %.9lf", fabs(((pow(h, 5))/90) * funcao4derivada(pontoB)));
+        printf("\nEstimativa do erro Ee = %.9lf\n\n\n", fabs((((h/3)*resultado) - (resultado1))/15));
 
     }else{
 
-        printf("\nAproximacao Regra de Simpson s = %.9lf\n\n", (h/3)*resultado);
+        printf("\nAproximacao Regra de Simpson s = %.9lf", (h/3)*resultado);
+        printf("\nErro absoluto Eabs = %.9lf", fabs(valorExato - ((h/3)*resultado)));
+        printf("\nErro do metodo Em = %.9lf\n\n\n", fabs(((pow(h, 5))/90) * funcao4derivada(pontoB)));
 
     }
 

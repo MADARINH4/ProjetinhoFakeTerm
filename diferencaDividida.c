@@ -90,8 +90,8 @@ void imprimeTabela(int n, double tabela[][n]){
 
         }
 
-        if(linha != (n - 2))for(coluna = 0; coluna < (n - (linha + 1)); coluna++)printf(" %14.10lf|", tabela[linha][coluna]);
-        else for(coluna = 0; coluna < (n - (linha)); coluna++)printf(" %14.10f|", tabela[linha][coluna]);
+        if(linha != (n - 2))for(coluna = 0; coluna < (n - (linha + 1)); coluna++)printf(" %14.9lf|", tabela[linha][coluna]);
+        else for(coluna = 0; coluna < (n - (linha)); coluna++)printf(" %14.9f|", tabela[linha][coluna]);
 
     }
 
